@@ -1,0 +1,23 @@
+##################
+# Filepaths #
+##################
+muni_text : "" #Directory where the raw text of all municipalities is stored
+embeddings : "" #Directory where the embeddings for all municipalities is stored
+exllama_path : "" #Directory with exllama
+llama13b_path : "" #Path for llama-2 13B
+llama70b_path : "" #Path for llama-2 70B
+processed_data : "" #Folder to store cleaned data
+raw_data : "" #Folder to store raw data in
+shape_files : "" #Directory where shape files are stored for mapping procedure
+figures_path : "" #Directory to store all figures in
+tables_path : "" #Directory to store all tables in
+
+##################
+# Config Parameters #
+##################
+num_neighbors: 5 #Number of chunks of text to include in context
+
+##################
+# API Keys #
+##################
+openai_key : ""
