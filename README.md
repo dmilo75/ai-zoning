@@ -2,7 +2,7 @@
 
 This is the Github repository for a project using Large Language Models (LLMs) to parse zoning documents. We introduce a new approach to decode and interpret statutes and administrative documents employing LLMs for data collection and analysis that we call generative regulatory measurement. We use this tool to construct a detailed assessment of U.S. zoning regulations. We estimate the correlation of these housing regulations with housing costs and construction. Our work highlights the efficacy and reliability of LLMs in measuring and interpreting complex regulatory datasets.
 
-For the latest paper please see [here](https://static1.squarespace.com/static/56086d00e4b0fb7874bc2d42/t/653b143abbdc5f5bfacf947a/1698370623319/AI_Zoning.pdf).
+For the latest paper please see [here](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4627587).
 
 Please note that all LLMs used in this project have a degree of randomness and thus cannot be exactly replicated. We limit the degree of randomness by, for example, setting the temperature of each model to very low levels. Replication results should still be very similar. 
 
