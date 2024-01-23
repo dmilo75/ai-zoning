@@ -108,7 +108,7 @@ To use llama-2 based models you must first register with Meta [here](https://ai.
 We also use [Exllama](https://github.com/turboderp/exllama) to speed up processing time. Please download this as well and provide the appropriate path.
 
 **Chat GPT Based Models**
-For Chat GPT based models please register for an account with OpenAI [here](https://platform.openai.com/signup). Please place your API key in `config.yaml`. We use the model 'gpt-4' for Chat GPT 4 and 'gpt-3.5-turbo' for Chat GPT 3.5; see [here]([url](https://platform.openai.com/docs/models)) for a list of all available Chat GPT based models. 
+For Chat GPT based models please register for an account with OpenAI [here](https://platform.openai.com/signup). Please place your API key in `config.yaml`. We use the model 'gpt-4' for Chat GPT 4 and 'gpt-3.5-turbo' for Chat GPT 3.5; see [here](https://platform.openai.com/docs/models) for a list of all available Chat GPT based models. 
 
 # code
 
