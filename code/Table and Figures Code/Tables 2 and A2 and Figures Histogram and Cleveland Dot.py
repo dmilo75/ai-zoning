@@ -1,22 +1,24 @@
-import pickle
+#Load config file
+import os
+import yaml
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+os.chdir('../../')
+with open('config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
+
 import pandas as pd
 import numpy as np
 from scipy.stats import mstats
+os.environ['MPLCONFIGDIR'] = config['raw_data']
+import matplotlib
+matplotlib.use('module://matplotlib_inline.backend_inline')
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
-import yaml
 
-#Load config file
-with open('../../config.yaml', 'r') as file:
-    config = yaml.safe_load(file)
-    
 # Load filepaths
 data_path = config['processed_data']
 raw_path = config['raw_data']
 figures_path = config['figures_path']
-
-
 
 #%%First, let's draw in all of the data
 
@@ -24,24 +26,40 @@ figures_path = config['figures_path']
 questions = pd.read_excel(os.path.join(raw_path,"Questions.xlsx"))
 
 #Cleaned llama output
-df = pd.read_excel(os.path.join(data_path,"llama-13b.xlsx"),index_col = 0)
+df = pd.read_excel(os.path.join(data_path,"Full Run.xlsx"),index_col = 0)
 
 #Get sample data with ACS data
 sample = pd.read_excel(os.path.join(data_path,"Sample_Enriched.xlsx"),index_col = 0)
 
 #Take the relevant variables and their identifiersr
-rel= sample[['POPULATION','Single Unit Permits','Multi-Unit Permits','All Unit Permits','% Urban','Median Household Income_2021','Median Gross Rent_Percent_Change','Median Home Value (Owner Occupied)_Percent_Change','Median Gross Rent_2021','Median Home Value (Owner Occupied)_2021','FIPS_PLACE','STATE']]
+rel= sample[['POPULATION','Single Unit Permits','Multi-Unit Permits','All Unit Permits','% Urban','Median Household Income_2021','Median Gross Rent_Percent_Change','Median Home Value (Owner Occupied)_Percent_Change','Median Gross Rent_2021','Median Home Value (Owner Occupied)_2021','FIPS_PLACE','STATE','CENSUS_ID_PID6']]
 
-df = pd.merge(df,rel,left_on = ['fips','State'], right_on = ['FIPS_PLACE','STATE'])
+df = pd.merge(df,rel,left_on = ['geoid'], right_on = ['CENSUS_ID_PID6'])
 
 #Merge in question info too
 df = pd.merge(df,questions, left_on = 'Question', right_on = 'ID')
 
+def clean_answer(answer):
+    
+    #Check if answer is numeric already
+    try:
+        return int(answer)
+    
+    #Otherwise process
+    except:
+        if answer ==  'Yes':
+            return 1
+        elif answer == 'No':
+            return 0
+        else:
+            return np.nan
+        
+#Clean answers now
+df['Answer'] = df['Answer'].apply(lambda x: clean_answer(x))
+
+
 
 #%%Get means
-
-
-
 
 sums = df[df['Question Type'].isin(['Numerical','Binary'])]
 
@@ -66,10 +84,6 @@ sums = pd.DataFrame({
 filtered_df = df[(df['Question Type'].isin(['Numerical','Binary'])) & df['Answer'].notnull()]
 sample_size = filtered_df['Question'].value_counts()
 sums['Sample Size'] = sums.index.to_series().apply(lambda x: sample_size[int(x) if isinstance(x, str) and x.isnumeric() else x])
-
-
-
-
 
 
 #%%Income terciles code
@@ -147,8 +161,8 @@ pop_weighted_mean_of_mins = (df_27min['Answer'] * df_27min['POPULATION']).sum() 
 sample_size_mean = df_27mean['Answer'].dropna().shape[0]
 sample_size_min = df_27min['Answer'].dropna().shape[0]
 
-sums.loc['Mean of Mean Lot Sizes (Square Feet)', ['Mean', 'Population Weighted Mean', 'Sample Size']] = [overall_mean_of_means, pop_weighted_mean_of_means, sample_size_mean]
-sums.loc['Mean of Min Lot Sizes (Square Feet)', ['Mean', 'Population Weighted Mean', 'Sample Size']] = [overall_mean_of_mins, pop_weighted_mean_of_mins, sample_size_min]
+sums.loc['Mean of Min Lot Sizes (Square Feet)', ['Mean', 'Population Weighted Mean', 'Sample Size']] = [overall_mean_of_means, pop_weighted_mean_of_means, sample_size_mean]
+sums.loc['Min of Min Lot Sizes (Square Feet)', ['Mean', 'Population Weighted Mean', 'Sample Size']] = [overall_mean_of_mins, pop_weighted_mean_of_mins, sample_size_min]
 
 # Now, compute the means for each category (both income and urban) for '27mean' and '27min'
 for category in categories:
@@ -163,8 +177,8 @@ for category in categories:
     mean_of_mins_category = df_27min_filtered['Answer'].mean()
 
     # Add these values to the sums dataframe in the appropriate columns
-    sums.loc['Mean of Mean Lot Sizes (Square Feet)', f'Mean ({category})'] = mean_of_means_category
-    sums.loc['Mean of Min Lot Sizes (Square Feet)', f'Mean ({category})'] = mean_of_mins_category
+    sums.loc['Mean of Min Lot Sizes (Square Feet)', f'Mean ({category})'] = mean_of_means_category
+    sums.loc['Min of Min Lot Sizes (Square Feet)', f'Mean ({category})'] = mean_of_mins_category
 
 #%%Get the latex formatted table
 
@@ -180,10 +194,8 @@ def adjust_index(x):
 sums.index = sums.index.to_series().apply(lambda x: adjust_index(x))
 
 
-
 # Setting max_colwidth to avoid truncation
 pd.set_option('display.max_colwidth', None)
-
 
 yes_no_indices = questions[questions['Question Type'] == 'Binary']['Question Detail']
 
@@ -195,14 +207,23 @@ sums.loc[mask, sums.columns.difference(['Sample Size'])] = sums.loc[mask, sums.c
 
 
 # Adjusting custom_format function to handle new column
-def custom_format(value, col_name, index):
-    if col_name == "Sample Size":
-        return str(int(value))
-    return '{:.0f}%'.format(value) if index in yes_no_indices and isinstance(value, (int, float)) else str(int(round(value)))
+def format_value(value, column_name, index):
+    """
+    Formats the given value based on the column name and index criteria.
+    """
+
+    # Check if the column is "Sample Size" or if the value is numeric and at a specific index.
+    if column_name == "Sample Size" or (index in yes_no_indices and isinstance(value, (int, float))):
+        return '{:,.0f}'.format(value)
+
+    # For all other cases, round the value, convert to an integer, and return as a string.
+    # This handles non-numeric types by attempting to round, convert to int, and then to string.
+    return str(int(round(value)))
+
 
 # Re-apply custom formatting for each column
 for col in sums.columns:
-    sums[col] = sums.apply(lambda row: custom_format(row[col], col, row.name), axis=1)
+    sums[col] = sums.apply(lambda row: format_value(row[col], col, row.name), axis=1)
 
 sum_dic = {
     'Continuous': sums.drop(index=yes_no_indices),
@@ -215,11 +236,16 @@ with pd.ExcelWriter(os.path.join(config['tables_path'],'Table 2 - National Means
         data.to_excel(writer, sheet_name=name)
 
 # Generate LaTeX and trim for both
-sum_dic['Continuous_latex'] = sum_dic['Continuous'].to_latex().split('midrule')[1].split('\\bottomrule')[0]
-sum_dic['Binary_latex'] = sum_dic['Binary'].to_latex().split('midrule')[1].split('\\bottomrule')[0]
+sum_dic['Continuous_latex'] = sum_dic['Continuous'].to_latex().split('midrule')[1].split('\\bottomrule')[0].strip()+'\\bottomrule'
+sum_dic['Binary_latex'] = sum_dic['Binary'].to_latex().split('midrule')[1].split('\\bottomrule')[0].strip()+'\\bottomrule'
 
 
-
+#Export latex to latex files
+with open(os.path.join(config['tables_path'],'latex','cts_means.tex'),'w') as file:
+    file.write(sum_dic['Continuous_latex'])
+    
+with open(os.path.join(config['tables_path'],'latex','binary_means.tex'),'w') as file:
+    file.write(sum_dic['Binary_latex'])
 
 #%%Make histograms of continuous random variables
 
@@ -237,54 +263,51 @@ q22_low, q22_high = df_q22.quantile([0.0, 0.95])
 q2_mean, q2_median = df_q2.mean(), df_q2.median()
 q22_mean, q22_median = df_q22.mean(), df_q22.median()
 
-fig, ax = plt.subplots(2, 2, figsize=(15, 15), dpi=300)
-
-# Iterate through all subplots to set the tick label size
-for axis in ax.flat:
-    for tick in axis.get_xticklabels() + axis.get_yticklabels():
-        tick.set_fontsize(fontsize)
-
-# First histogram (for question 2)
-ax[0][0].hist(df_q2, bins=int(q2_high), align='left', edgecolor='black', range=(0, q2_high))
-ax[0][0].set_title('How many zoning districts,\nincluding overlays, are in the municipality?', fontsize=fontsize)
-ax[0][0].set_ylabel('Frequency', fontsize=fontsize)
-ax[0][0].text(0.95, 0.95, f'Mean: {q2_mean:.1f}\nMedian: {q2_median:.1f}',
-              transform=ax[0][0].transAxes, verticalalignment='top', horizontalalignment='right',
-              bbox=dict(facecolor='white', alpha=0.5), fontsize=fontsize)
-
-# Second histogram (for question 22)
-ax[0][1].hist(df_q22, bins=50, align='left', edgecolor='black', range=(0, q22_high))
-ax[0][1].set_title('What is the longest frontage requirement\nfor single family residential development in any district?', fontsize=fontsize)
-ax[0][1].text(0.95, 0.95, f'Mean: {q22_mean:.1f}\nMedian: {q22_median:.1f}',
-              transform=ax[0][1].transAxes, verticalalignment='top', horizontalalignment='right',
-              bbox=dict(facecolor='white', alpha=0.5), fontsize=fontsize)
-
-# Third histogram (for mean lot sizes)
-mean_values_99th = np.percentile(mean_values, 95)
+mean_values_95th = np.percentile(mean_values, 95)
 mean_of_mean_values = np.mean(mean_values)
 median_of_mean_values = np.median(mean_values)
-ax[1][0].hist(mean_values, bins=100, align='left', edgecolor='black', range=(0, mean_values_99th))
-ax[1][0].set_title('Mean Lot Sizes (Thousand Feet)', fontsize=fontsize)
-ax[1][0].set_ylabel('Frequency', fontsize=fontsize)
-ax[1][0].text(0.95, 0.95, f'Mean: {mean_of_mean_values:.1f}\nMedian: {median_of_mean_values:.1f}',
-              transform=ax[1][0].transAxes, verticalalignment='top', horizontalalignment='right',
-              bbox=dict(facecolor='white', alpha=0.5), fontsize=fontsize)
 
-# Fourth histogram (for min lot sizes)
-min_values_99th = np.percentile(min_values, 95)
+min_values_95th = np.percentile(min_values, 95)
 mean_of_min_values = np.mean(min_values)
 median_of_min_values = np.median(min_values)
-ax[1][1].hist(min_values, bins=100, align='left', edgecolor='black', range=(0, min_values_99th))
-ax[1][1].set_title('Min Lot Sizes (Thousand Feet)', fontsize=fontsize)
-ax[1][1].text(0.95, 0.95, f'Mean: {mean_of_min_values:.1f}\nMedian: {median_of_min_values:.1f}',
-              transform=ax[1][1].transAxes, verticalalignment='top', horizontalalignment='right',
-              bbox=dict(facecolor='white', alpha=0.5), fontsize=fontsize)
 
-path = os.path.join(figures_path,"histograms.png")
+# Function to create histogram
+def create_histogram(ax, data, title, mean, median, bins, data_range):
+    ax.hist(data, bins=bins, align='left', edgecolor='black', range=data_range)
+    ax.set_title(title, fontsize=fontsize)
+    ax.set_ylabel('Frequency', fontsize=fontsize)
+    ax.text(0.95, 0.95, f'Mean: {mean:.1f}\nMedian: {median:.1f}',
+            transform=ax.transAxes, verticalalignment='top', horizontalalignment='right',
+            bbox=dict(facecolor='white', alpha=0.5), fontsize=fontsize)
+    
+    # Set tick label size
+    for tick in ax.get_xticklabels() + ax.get_yticklabels():
+        tick.set_fontsize(fontsize)
+
+    
+# Original combined figure
+fig, ax = plt.subplots(2, 2, figsize=(15, 15), dpi=300)
+create_histogram(ax[0][0], df_q2, 'The Number of Zoning Districts in Each Municipality', q2_mean, q2_median, int(q2_high), (0, q2_high))
+create_histogram(ax[0][1], df_q22, 'What is the longest frontage requirement\nfor single family residential development\nin any district? (Thousand Feet)', q22_mean, q22_median, 50, (0, q22_high))
+create_histogram(ax[1][0], mean_values, 'Mean Min Lot Size (Thousand Feet)', mean_of_mean_values, median_of_mean_values, 100, (0, mean_values_95th))
+create_histogram(ax[1][1], min_values, 'Min Min Lot Size (Thousand Feet)', mean_of_min_values, median_of_min_values, 100, (0, min_values_95th))
+
 fig.tight_layout()
-fig.savefig(path, dpi=300)
-
+fig.savefig(os.path.join(figures_path, "combined_histograms.png"), dpi=300)
 plt.show()
+
+# Creating standalone figures
+for i, (data, title, mean, median, bins, data_range, file_name) in enumerate([
+    (df_q2, 'How many zoning districts,\nincluding overlays, are in the municipality?', q2_mean, q2_median, int(q2_high), (0, q2_high), "q2_histogram.png"),
+    (df_q22, 'What is the longest frontage requirement\nfor single family residential development in any district?', q22_mean, q22_median, 50, (0, q22_high), "q22_histogram.png"),
+    (mean_values, 'Mean Lot Size Across Districts (Thousand Feet)', mean_of_mean_values, median_of_mean_values, 100, (0, mean_values_95th), "mean_lot_sizes_histogram.png"),
+    (min_values, 'Min Lot Size Across Districts (Thousand Feet)', mean_of_min_values, median_of_min_values, 100, (0, min_values_95th), "min_lot_sizes_histogram.png")]):
+    
+    fig, ax = plt.subplots(figsize=(8, 6), dpi=300)
+    create_histogram(ax, data, title, mean, median, bins, data_range)
+    fig.savefig(os.path.join(figures_path, file_name), dpi=300)
+    plt.show()
+    plt.close(fig)
 
 #%%Print match stats for correlation data
 
@@ -320,8 +343,7 @@ def question_name(q):
 
 
 def calculate_correlation(df,graph =False):
-    
-    
+
     # Convert 'Answer' to numeric
     df['Answer'] = pd.to_numeric(df['Answer'], errors='coerce')
     
@@ -334,12 +356,14 @@ def calculate_correlation(df,graph =False):
     mask_mean = (df['Question'] == 27) & (df['Type'] == 'Mean')
     df.loc[mask_min, 'Question'] = '27min'
     df.loc[mask_mean, 'Question'] = '27mean'
-    
+
+
     # Winsorize for questions in 'numerical' and the new '27min' and '27mean' questions
     for num in questions[questions['Question Type']=='Numerical']['ID'].tolist() + ['27min', '27mean']:
         mask = (df['Question'] == num) & (df['Answer'].notna())
         non_null_answers = df.loc[mask, 'Answer']
         df.loc[mask, 'Answer'] = mstats.winsorize(non_null_answers, limits=[0.05, 0.05])
+
 
 
     # List of columns to calculate correlation for
@@ -387,8 +411,16 @@ with pd.ExcelWriter(os.path.join(config['tables_path'],'Table A2 - National Corr
         data.to_excel(writer, sheet_name=name)
 
 # Generate LaTeX and trim for both
-corr_dic['Continuous_latex'] = corr_dic['Continuous'].to_latex().split('midrule')[1].split('\\bottomrule')[0]
-corr_dic['Binary_latex'] = corr_dic['Binary'].to_latex().split('midrule')[1].split('\\bottomrule')[0]
+corr_dic['Continuous_latex'] = corr_dic['Continuous'].to_latex().split('midrule')[1].split('\\bottomrule')[0].strip()+'\\bottomrule'
+corr_dic['Binary_latex'] = corr_dic['Binary'].to_latex().split('midrule')[1].split('\\bottomrule')[0].strip()+'\\bottomrule'
+
+
+#Export latex to latex files
+with open(os.path.join(config['tables_path'],'latex','cts_corr.tex'),'w') as file:
+    file.write(corr_dic['Continuous_latex'])
+    
+with open(os.path.join(config['tables_path'],'latex','binary_corr.tex'),'w') as file:
+    file.write(corr_dic['Binary_latex'])
 
 #%%
 
@@ -456,12 +488,9 @@ def plot_correlations(correlations, sort_by_column=None, save_filename=None):
     # Save the plot to file if save_filename is provided
     if save_filename:
         save_path = os.path.join(figures_path,save_filename) 
-        plt.savefig(save_path, dpi=300)
-    
+        plt.savefig(save_path, dpi=300) 
     
     plt.show()
-
-
 
 
 plot_correlations(correlations.copy()[['Median Gross Rent_2021','Median Home Value (Owner Occupied)_2021','All Unit Permits per capita']], 

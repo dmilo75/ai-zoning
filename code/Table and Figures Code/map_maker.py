@@ -10,7 +10,9 @@ from PIL import Image
 import yaml
 
 # Load filepaths
-with open('../../config.yaml', 'r') as file:
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+os.chdir('../../')
+with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 shape_path = config['shape_files']
@@ -19,16 +21,15 @@ figures_path = config['figures_path']
 yes_no_qs = config['yes_no_qs']
 numerical = config['numerical']+['27mean','27min'] #Add in lot size questions 
 
-model = "llama-13b" #Which model results you want to run maps for
-
+model = "Full Run" #Which model results you want to run maps for
 
 #Check to see if we have the necessary export folders and if not then make them
 
 # Folders to create within 'All Maps'
-subfolders = ['Individual Maps', 'Combined Maps', 'Legends']
+subfolders = ['Individual Maps', 'Combined Maps', 'Legends', 'Standalone Maps']
 
 # Initialize with the 'All Maps' folder
-current_folder = os.path.join(figures_path, 'All Maps')
+current_folder = os.path.join(figures_path, 'All Maps New')
 
 # Loop to create folders
 for folder in [current_folder] + [os.path.join(current_folder, sub) for sub in subfolders]:
@@ -67,37 +68,68 @@ for city, params in full_params.items():
 
 #List of questions to make maps for
 question_map = {
-    17: 'Does the zoning bylaw/ordinance include any mandates or incentives for development of affordable units?',
+    17: 'Does the zoning bylaw/ordinance include any mandates\nor incentives for development of affordable units?',
     '27min':'Minimum minimum lot size',
     }
+
+#Let's use Sample Data Excel to map to state and filter
+summary_data = pd.read_excel(os.path.join(config['raw_data'],"Sample Data.xlsx"))
+
+
+#Convert to the old naming format with fips places to simplify geoid transition for now
+def get_old_name(geoid,sample):
+    
+    #Get row
+    row = sample[sample['CENSUS_ID_PID6'] == int(geoid)].iloc[0]
+
+    return row['UNIT_NAME'].lower()+'#'+str(row['FIPS_PLACE'])+'#'+row['State']
+    
+results = pd.read_excel(os.path.join(config['processed_data'],model+'.xlsx'),index_col = 0)
+
+#Just need a small tweak here given the new format 
+results['Muni'] = results['geoid'].apply(lambda x: get_old_name(x,summary_data))
+
+#Ensure answer is numeric type 
+def clean_answer(answer):
+    
+    #Check if answer is numeric already
+    try:
+        return int(answer)
+    
+    #Otherwise process
+    except:
+        if answer ==  'Yes':
+            return 1
+        elif answer == 'No':
+            return 0
+        else:
+            return np.nan
+        
+#Clean answers now
+results['Answer'] = results['Answer'].apply(lambda x: clean_answer(x))
+
+results['Answer'] = results['Answer'].astype(float)
 
 #%%Loop over each city and question and make the map
 for city, params in full_params.items():
     for question, question_text in question_map.items():
-        
         params = full_params[city]
-        
         state_abbrevs = params['abbrev']
         state_fipses = params['fips']
         
         #%%Load in model output 
-                
-        res = pd.read_excel(os.path.join(config['processed_data'],model+".xlsx"),index_col = 0)
-        res['Muni'] = res['Muni'] + '#' + res['muni_fips'].astype(str)
+        res = results.copy()
         
+        # Filter the sample dataframe based on 'State' column for multiple states if given
+        sample = summary_data[summary_data['State'].isin(state_abbrevs)]
+    
         # Update 'Question' based on 'Type'
         mask = res['Question'] == 27
         res.loc[mask & (res['Type'] == 'Mean'), 'Question'] = '27mean'
         res.loc[mask & (res['Type'] == 'Min'), 'Question'] = '27min'
         
         all_data = res.to_dict('records')
-        
-        #Let's use Sample Data Excel to map to state and filter
-        sample = pd.read_excel(os.path.join(config['raw_data'],"Sample Data.xlsx"))
-        
-        # Filter the sample dataframe based on 'State' column for multiple states if given
-        sample = sample[sample['State'].isin(state_abbrevs)]
-        
+
         # Convert FIPS_PLACE to string and then concatenate with UNIT_NAME
         sample['FIPS_PLACE_str'] = sample['FIPS_PLACE'].astype(str)
         
@@ -133,7 +165,8 @@ for city, params in full_params.items():
         for state_abbrev, state_fips in zip(state_abbrevs, state_fipses):
             
             # Load the municipalities shapefile
-            path_municipalities = shape_path+rf"\\Places\tl_2022_{state_fips}_place\tl_2022_{state_fips}_place.shp"
+            # path_municipalities = shape_path+rf"\\Places\tl_2022_{state_fips}_place\tl_2022_{state_fips}_place.shp"
+            path_municipalities = os.path.join(shape_path, "Places", f"tl_2022_{state_fips}_place", f"tl_2022_{state_fips}_place.shp")
             gdf_municipalities = gpd.read_file(path_municipalities)
             gdf_municipalities['TYPE'] = 'place'
             
@@ -141,7 +174,7 @@ for city, params in full_params.items():
             if state_abbrev == 'ma':
                 
                # Load county subdivisions for Massachusetts
-               path_cousub = shape_path+rf"\\County Subdivisions\tl_2022_{state_fips}_cousub\tl_2022_{state_fips}_cousub.shp"
+               path_cousub = os.path.join(shape_path, "County Subdivisions", f"tl_2022_{state_fips}_cousub", f"tl_2022_{state_fips}_cousub.shp")
                gdf_cousub = gpd.read_file(path_cousub)
                gdf_cousub = gdf_cousub.rename(columns = {'COUSUBFP':'PLACEFP'})
                gdf_cousub['TYPE'] = 'cousub'
@@ -163,7 +196,7 @@ for city, params in full_params.items():
             all_fips_from_files.extend(fips_from_files)
             
             # Base path where state-wise water area files are located
-            base_path_water = shape_path+rf"\\Water\{state_fips}"
+            base_path_water = os.path.join(shape_path, "Water", str(state_fips))
         
             # Automatically generate the list of county FIPS codes from subdirectories
             county_fips = [name for name in os.listdir(base_path_water) if os.path.isdir(os.path.join(base_path_water, name))]
@@ -175,6 +208,16 @@ for city, params in full_params.items():
         
         # Concatenate all loaded municipalities (if there's more than one state)
         gdf_municipalities = pd.concat(all_gdf_municipalities, ignore_index=True)
+        
+        # Ensure that every text file FIPS for Massachusetts matched.
+        if 'ma' in state_abbrevs:
+            unmatched_fips_from_files = set([str(fips) for fips in all_fips_from_files]) - set(gdf_municipalities['PLACEFP'].astype(int).astype(str).tolist())
+            
+            if unmatched_fips_from_files:
+                raise ValueError(f"Some FIPS from text files did not match the shapefile data: {unmatched_fips_from_files}")
+        
+            # Filter out gdf_municipalities entries that don't have a matching FIPS in the text files
+            gdf_municipalities = gdf_municipalities[gdf_municipalities['PLACEFP'].astype(int).isin(all_fips_from_files)]
         
         # Combine all loaded water geodataframes
         gdf_water_area = pd.concat(all_gdfs_water, ignore_index=True)
@@ -264,7 +307,7 @@ for city, params in full_params.items():
             data_dict["I Don't Know"] = {'data': gdf_municipalities_with_text[condition_no_answer], 'color': '#666666'}  # Dark Grey
         
         
-        path_counties = os.path.join(shape_path,"Counties\\tl_2022_us_county.shp")
+        path_counties = os.path.join(shape_path,"Counties", "tl_2022_us_county.shp")
         gdf_counties = gpd.read_file(path_counties)
         gdf_counties = gdf_counties[gdf_counties['STATEFP'].isin(state_fipses)]  # Filter for state
         
@@ -284,6 +327,7 @@ for city, params in full_params.items():
         gdf_counties.plot(ax=ax, color=color_county, edgecolor='black', linewidth=0.5)
         
         # Loop through data_dict to plot each category
+        print(data_dict.items())
         legend_handles = []
         for label, info in data_dict.items():
             info['data'].plot(ax=ax, color=info['color'], edgecolor='black')
@@ -297,7 +341,7 @@ for city, params in full_params.items():
         ax.add_patch(patches.Rectangle((boundaries[0], boundaries[2]), boundaries[1] - boundaries[0], boundaries[3] - boundaries[2], 
                                        fill=False, edgecolor='black', linewidth=1))
         
-        ax.set_title(city, fontsize = 20)
+        ax.set_title(city, fontsize = 25)
         
         # Zoom into the specified area
         ax.set_xlim(boundaries[0:2])
@@ -311,11 +355,31 @@ for city, params in full_params.items():
         ax.axis('off')
         
         # Construct the path for the saved image
-        save_path = os.path.join(figures_path,f"All Maps\Individual Maps\{str(question)}_{city}.png")
+        save_path = os.path.join(figures_path, "All Maps New", "Individual Maps",f"{str(question)}_{city}.png")
         
         # Save the figure
-        fig.savefig(save_path, dpi=300, bbox_inches='tight')
+        fig.savefig(save_path, dpi=300, bbox_inches='tight')  
         
+        offset = -0.165
+        
+        if len(legend_handles) > 4:
+            offset = -0.24
+        
+        # Add the legend to the map
+        ax.legend(handles=legend_handles, fontsize=20, loc='lower center', ncol=len(legend_handles), bbox_to_anchor=(0.5, offset), ncols = 2, frameon = False)
+
+        # Set or edit the title
+        editable_title = f"{question_text}\n{city}"  # Replace this with your desired title
+        ax.set_title(editable_title, fontsize=20)
+        
+        # Save the figure with the map and integrated legend in the 'Standalone Maps' directory
+        standalone_save_path = os.path.join(figures_path, "All Maps New","Standalone Maps",f"{str(question)}_{city}_standalone.png")
+        fig.savefig(standalone_save_path, dpi=300, bbox_inches='tight')
+        
+        # Show the figure with the map and legend (optional)
+        plt.show()
+
+        #%%
         
         # Create a new figure and axis for the legend
         fig_legend, ax_legend = plt.subplots(figsize=(20, 2.5), dpi=300)  # Adjust the size as needed
@@ -325,10 +389,10 @@ for city, params in full_params.items():
         ax_legend.legend(handles=legend_handles, fontsize=30, facecolor='#FFFFFF', loc='center', ncol = 2, edgecolor= 'none')
         
         # Save the legend figure
-        fig_legend.savefig(os.path.join(figures_path,f"All Maps\Legends\{str(question)}_legend.png"), dpi=300)
+        fig_legend.savefig(os.path.join(figures_path,"All Maps new","Legends",f"{str(question)}_legend.png"), dpi=300)
         
         # Show the legend (optional)
-        plt.show()
+        # plt.show()
         
 
 #%%Loop over each question and make 2x2 plot with legend
@@ -344,12 +408,12 @@ for question in question_map.keys():
     
     # Loop through each city and read in the images
     for city in full_params.keys():
-        imgs.append(Image.open(os.path.join(figures_path,f"All Maps\Individual Maps\{str(question)}_{city}.png")))
+        imgs.append(Image.open(os.path.join(figures_path,f"All Maps New\Individual Maps\{str(question)}_{city}.png")))
     
     img_width, img_height = imgs[0].size
     
     # Load the legend image
-    legend_img = Image.open(os.path.join(figures_path,f"All Maps\Legends\{str(question)}_legend.png"))
+    legend_img = Image.open(os.path.join(figures_path,f"All Maps New\Legends\{str(question)}_legend.png"))
     
     # Calculate new dimensions for the legend
     new_legend_width = img_width * 2
@@ -375,8 +439,13 @@ for question in question_map.keys():
     # Paste the resized legend image below the 2x2 grid
     new_img.paste(legend_img, (0, img_height * 2))
     
-    # Save the new image
-    new_img.save(os.path.join(figures_path,f"All Maps\Combined Maps\{str(question)}_combined.png"))
+    # Convert the image to RGB if it's RGBA (JPEG does not support alpha channel)
+    if new_img.mode != 'RGB':
+        new_img = new_img.convert('RGB')
+    
+    # Save the new image as JPEG with reduced quality
+    new_img.save(os.path.join(figures_path,f"All Maps New\\Combined Maps\\{str(question)}_combined.jpg"), 'JPEG', quality=20)
+
 
     print(f"Combined image for question {question} saved.")
 

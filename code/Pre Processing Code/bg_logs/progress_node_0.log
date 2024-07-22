@@ -1,0 +1,6 @@
+2024-07-08 08:20:45,741 - INFO - Starting the main code execution.
+2024-07-08 08:20:45,741 - INFO - Results directory created at processed data\Block Group Analysis Results.
+2024-07-08 08:21:06,790 - INFO - Census of governments data loaded.
+2024-07-08 08:21:06,804 - INFO - Defunct municipalities/townships filtered out.
+2024-07-08 08:21:06,816 - INFO - Counties filtered out.
+2024-07-08 08:21:06,827 - INFO - Sample sorted by state.
