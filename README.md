@@ -1,4 +1,4 @@
-#July 22 Update
+# July 22 Update
 
 For the latest paper please see [here](https://conference.nber.org/conf_papers/f205452.pdf). 
 
