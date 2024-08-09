@@ -1,8 +1,16 @@
+# July 22 Update
+
+For the latest paper please see [here](https://conference.nber.org/conf_papers/f205452.pdf). 
+
+For the latest data please see [here](https://www.dropbox.com/scl/fi/x6zr6ejh63frx65qneq92/Public-Dataset-v1.xlsx?rlkey=zxjjj2j7tt54imatif2gjddql&st=u6h0kmhk&dl=0).
+
+Please note that the code in this repository reflects an earlier version of the project. An update with more recent code will arrive soon. 
+
 # AI and Zoning
 
 This is the Github repository for a project using Large Language Models (LLMs) to parse zoning documents. We introduce a new approach to decode and interpret statutes and administrative documents employing LLMs for data collection and analysis that we call generative regulatory measurement. We use this tool to construct a detailed assessment of U.S. zoning regulations. We estimate the correlation of these housing regulations with housing costs and construction. Our work highlights the efficacy and reliability of LLMs in measuring and interpreting complex regulatory datasets.
 
-For the latest paper please see [here](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4627587).
+
 
 Please note that all LLMs used in this project have a degree of randomness and thus cannot be exactly replicated. We limit the degree of randomness by, for example, setting the temperature of each model to very low levels. Replication results should still be very similar. 
 
@@ -15,7 +23,6 @@ Please note that all LLMs used in this project have a degree of randomness and t
 ### Overview
 
 #### Embeddings setup
-![llm drawio (3)](https://github.com/dmilo75/ai-zoning/assets/64778259/cd894ecb-9c9a-4359-af70-7c06f66fae3c)
 
 1) You can clone the repository using:
    
@@ -31,8 +38,6 @@ Please note that all LLMs used in this project have a degree of randomness and t
 This process creates embeddings from raw text and stores them in the embeddings path provided in config.yaml file.
 
 #### Llama2 or Chat GPT inference
-![llm1 drawio (1)](https://github.com/dmilo75/ai-zoning/assets/64778259/da656361-171c-45e7-ad02-3d4d3eeffc03)
-
 Steps 1 and 2 should be done if planning to use the llama2 model. Else, it is not required.
 
 1) For downloading llama2 13B/70B GPTQ, you can run the Python script (ai-zoning/code/download.py) that can download the model from huggingface. Make sure to change the download directory while using the code.
