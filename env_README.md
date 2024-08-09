@@ -1,4 +1,4 @@
-# README
+# env_README
 
 ## Summary
 This README provides instructions for installing Miniconda on Windows and macOS/Unix systems. It also includes steps to create and activate a new conda environment with Python 3.12.4, as well as instructions to do the same using venv. Finally, it covers how to install required packages from `macosrequirements.txt` and `requirements.txt`.
