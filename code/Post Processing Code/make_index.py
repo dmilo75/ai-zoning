@@ -13,21 +13,7 @@ with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 # Define the model to use
-model = 'latest_combined'
-
-# define function to transform the imputed data
-def transform(imputed_df,type):
-
-    if type == 'standard_pca':
-
-        # Define columns to make negative
-        cols_neg = ['4', '5', '6', '8', '11', '13', '14']
-
-        # Make negative
-        imputed_df[cols_neg] = -imputed_df[cols_neg] + 1
-
-        #Return
-        return imputed_df
+model = 'augest_latest'
 
 yes_no_qs = config['yes_no_qs']
 
@@ -59,9 +45,11 @@ winsorize_to_null(pivot_df, '28Max')
 winsorize_to_null(pivot_df, '28Min')
 winsorize_to_null(pivot_df, '22')
 winsorize_to_null(pivot_df, '34')
+winsorize_to_null(pivot_df, '38')
+winsorize_to_null(pivot_df, '40')
 
 #Drop 28Max and 28Mean
-pivot_df = pivot_df.drop(columns = ['28Mean'])
+pivot_df = pivot_df.drop(columns = ['28Mean','27Max','27Mean','27Min'])
 
 #For binary columns impute by making it 0.5, i.e. in between 0 and 1
 for col in pivot_df.columns:
@@ -77,9 +65,6 @@ imputed_data = knn_imputer.fit_transform(pivot_df)
 # Convert the imputed numpy array back into a pandas DataFrame
 imputed_df = pd.DataFrame(imputed_data, columns=pivot_df.columns, index=pivot_df.index)
 
-#Transform the imputed_df into sub_indices
-imputed_df = transform(imputed_df,'standard_pca')
-
 #Make 28Max binary for if its greater than 43560
 imputed_df['28Max'] = imputed_df['28Max'].apply(lambda x: 1 if x > 43560 else 0)
 
@@ -88,17 +73,22 @@ scaler = StandardScaler()
 normalized_data = scaler.fit_transform(imputed_df)
 
 # Apply PCA to the normalized data to obtain the first principal component
-pca = PCA(n_components=3)
+pca = PCA(n_components=5)
 principal_components = pca.fit_transform(normalized_data)
 
 # Extract the loadings for the first two principal components
-loadings = pca.components_[:3, :]  # Gets the first three components
+loadings = pca.components_[:5, :]  # Gets the first three components
 
 # Convert the loadings into a DataFrame for easier handling
-loadings_df = pd.DataFrame(loadings, index=['PC1', 'PC2','PC3'], columns=[f'Feature{i}' for i in range(1, normalized_data.shape[1]+1)])
+loadings_df = pd.DataFrame(loadings, index=['PC1', 'PC2','PC3','PC4','PC5'], columns=[f'Feature{i}' for i in range(1, normalized_data.shape[1]+1)])
+
+#Multiply PC1 column by -1
+loadings_df['Feature1'] = loadings_df['Feature1']*-1
 
 #Set columns
 loadings_df.columns = list(imputed_df.columns)
+
+loadings_df['Variance Explained'] = pca.explained_variance_ratio_
 
 #Export to processed_data
 loadings_df.to_excel(os.path.join(config['processed_data'],'Model Output',model,'Loadings.xlsx'))
@@ -119,7 +109,7 @@ for j in range(loadings.shape[0]):
     #print(f"{list(imputed_df.columns)[i]}: {loadings[2, i]:.2f}")
 
 # Add the first principal component as a new column to the DataFrame
-imputed_df['First_Principal_Component'] = principal_components[:, 0]
+imputed_df['First_Principal_Component'] = principal_components[:, 0]*-1
 
 #Add second and third principal components
 imputed_df['Second_Principal_Component'] = principal_components[:, 1]

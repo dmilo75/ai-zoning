@@ -33,6 +33,7 @@ file_names = {
     'shape_vars':'Shape_data.xlsx',
     'year_inc':'Year_Incorporated.xlsx',
     'social_capital':'Social_Capital_Data.xlsx',
+    'school_finance':'School_Finance_Data.xlsx',
 }
 
 # Read in data from interim_data
@@ -51,7 +52,9 @@ for key in data_frames.keys():
     # If merge_key not in data_frames[key], then reset the index and make the index be called the merge_key
     if merge_key not in data_frames[key].columns:
         data_frames[key] = data_frames[key].reset_index().rename(columns={'index': merge_key})
-    merged_df = pd.merge(merged_df, data_frames[key], on=merge_key, how='outer')
+    merged_df = pd.merge(merged_df, data_frames[key], on=merge_key, how='left')
+
+
 
 #Assert number of rows in merged_df is the same as in sample
 if len(merged_df) != len(sample):
@@ -67,6 +70,26 @@ merged_df = ccv.process_gov_fin_vars(merged_df)
 # Create affordability measures
 api_key = config['census_key']
 merged_df = ccv.create_affordability_measures(merged_df, api_key)
+
+#Make region
+def fips_to_region(fips_state):
+    northeast = {9, 23, 25, 33, 34, 36, 42, 44, 50}
+    midwest = {17, 18, 19, 20, 26, 27, 29, 31, 38, 39, 46, 55}
+    south = {1, 5, 10, 11, 12, 13, 21, 22, 24, 28, 37, 40, 45, 47, 48, 51, 54}
+    west = {2, 4, 6, 8, 15, 16, 30, 32, 35, 41, 49, 53, 56}
+
+    if fips_state in northeast:
+        return "Northeast"
+    elif fips_state in midwest:
+        return "Midwest"
+    elif fips_state in south:
+        return "South"
+    elif fips_state in west:
+        return "West"
+    else:
+        return "Unknown"
+
+merged_df['Region'] = merged_df['FIPS_STATE'].apply(fips_to_region)
 
 # Export so we have a dataframe with all the data
 merged_df.to_excel(os.path.join(data_path, "Sample_Enriched.xlsx"))

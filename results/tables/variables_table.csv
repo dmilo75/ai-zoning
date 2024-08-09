@@ -1,0 +1,31 @@
+Variable,Source,Definition
+Foreign Born Share,2022 American Community Survey,The percentage of the population that is foreign-born (B05002_013E / B05002_001E).
+Median Household Income,2022 American Community Survey,The median income of all households (B19013_001E).
+Share Population 65 and Over,2022 American Community Survey,The percentage of the population aged 65 and over (B01001_020E to B01001_025E and B01001_044E to B01001_049E / B01001_001E).
+Median Gross Rent,2022 American Community Survey,The median gross rent for rental units (B25064_001E).
+Median Home Value,2022 American Community Survey,The median value of owner-occupied housing units (B25077_001E).
+Share Units Owner Occupied,2022 American Community Survey,The percentage of housing units that are owner-occupied (B25003_002E / B25003_001E).
+Share Population Under 18,2022 American Community Survey,The percentage of the population under 18 years old (B01001_003E to B01001_006E and B01001_027E to B01001_030E / B01001_001E).
+White Share,2022 American Community Survey,The percentage of the population identifying as White (B02001_002E / B02001_001E).
+Poverty Rate,2022 American Community Survey,The percentage of the population living below the poverty line (B17001_002E / B17001_001E).
+College Share,2022 American Community Survey,"The percentage of the population aged 25 and over with a bachelor's degree or higher (B15003_022E, B15003_023E, B15003_024E, B15003_025E / B15003_001E)."
+Share Structures Built Before 1970,2022 American Community Survey,"he percentage of housing structures built before 1970 (B25034_008E, B25034_009E, B25034_010E, B25034_011E / B25034_001E)."
+Share Structures with 2 or More Units,2022 American Community Survey,he percentage of housing structures with 2 or more units (B25024_004E to B25024_009E / B25024_001E).
+Vacancy Rate,2022 American Community Survey,The percentage of vacant housing units (B25002_003E / B25002_001E).
+Share with Commute Over 30 Minutes,2022 American Community Survey,The percentage of workers with a commute time over 30 minutes (B08303_008E to B08303_013E / B08303_001E).
+Housing Unit Density,2022 American Community Survey,The number of housing units in a local government divided by the area from its shape file. 
+Share Units Affordable,2022 American Community Survey,"The percentage of housing units affordable to households earning the state median income. This measure combines rental and owner-occupied housing affordability, determined using the state median income. Rental units are affordable if the monthly rent does not exceed 30% of the monthly median household income, and owner-occupied units are affordable if their value is less than three times the annual median household income. The total number of affordable rental and owner-occupied units is summed and divided by the total number of housing units to determine the share of units that are affordable."
+Job Density,Opportunity Insights,Number of jobs per square mile in each census tract in 2013. 'job_density_2013' from the Opportunity Atlas neighborhood characteristics dataset. 
+Opportunity Index,Opportunity Insights,"The kid family rank, a measure of economic mobility. "
+Average Math Test Scores,The Education Opportunity Project at Stanford University,The average math test score pooled across grades (3rd-8th) and years (2008-2019) (cs_mn_avg_mth_ol).
+Math Learning Rate,The Education Opportunity Project at Stanford University,The slope of the increase in math test scores from 3rd to 8th grade pooled across years (2008-2019) (cs_mn_grd_mth_ol).
+Percent Eligible for Free Lunch,The Education Opportunity Project at Stanford University,The percentage of students eligible for free lunch (perflu). 
+Property Tax Rate,The Government Finance Database,The property tax rate is calculated as the total property tax revenue (Property_Tax_2017) divided by the aggregate home value from the 2017 ACS.
+Total Expenditure Per Capita (2017),The Government Finance Database,Total expenditures per capita is calculated as the total government expenditures (Total_Expenditure_2017) divided by the population (From 2017 ACS) of the municipality or township. 
+Building Permits All Units 2021,Building Permits Survey,The number of housing units permitted in 2021 divided by the population of the local government. 
+Year of Incorporation,"Goodman, C. B. (2023). Municipal Incorporation Data, 1789-2020 (Version 1.0.0) [Computer software]. https://github.com/cbgoodman/muni-incorporation/",The year a municipality was incorporated. Not available for townships. 
+Percent Democrat,"""U.S. Voting by Census Block Groups"", Bryan, Michael",The share of votes that are democrat in 2021. 
+New Housing Unit Elasticity,Nate Baum and Lu Han (2024),"The coefficient on the change in new housing units to the change in housing prices, specifically gamma01b_newunits_FMM. "
+Log Land Area,2022 Census Shapefiles,The area in acres of a local government with a log transform. 
+Log Neighbors within 25 Miles,2022 Census of Governments,The number of other local goverments within 25 miles of a local government. 
+Miles to Metro Center,2022 Census Shapefiles,"The number of miles from the centroid of a local governments shape file to the center of a metropolitan area, defined as the city hall of the center city. "

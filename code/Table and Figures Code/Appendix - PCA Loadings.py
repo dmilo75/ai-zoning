@@ -29,6 +29,8 @@ def adjust_index(index):
             return 'Minimum of Residential Min Lot Sizes'
         elif index == '28Max':
             return 'Maximum of Residential Min Lot Sizes'
+        if index == 'Variance Explained':
+            return 'Variance Explained'
         return index
 
 # Import loadings
@@ -43,17 +45,15 @@ loadings.index = [adjust_index(index) for index in loadings.index]
 # Sort by PC1
 loadings = loadings.sort_values('PC1', ascending=False)
 
-#Drop third PC
-loadings = loadings.drop(columns = 'PC3')
 
 # Rename columns
-loadings.columns = ['First Principal Component', 'Second Principal Component']
+loadings.columns = ['First', 'Second','Third','Fourth','Fifth']
 
 # Set the max_colwidth option to None
 pd.set_option('display.max_colwidth', None)
 
 # Translate to LaTeX
-latex = loadings.to_latex(index=True, float_format = '%.2f', column_format = 'p{13cm}cc', caption = 'Principal Component Analysis Loadings', label = 'tab:loadings')
+latex = loadings.to_latex(index=True, float_format = '%.2f', column_format = 'p{13cm}ccccc', caption = 'Principal Component Analysis Loadings', label = 'tab:loadings')
 
 #Export latex file
 with open(os.path.join(config['tables_path'],'latex', 'Appendix - PCA Loadings.tex'), 'w') as f:

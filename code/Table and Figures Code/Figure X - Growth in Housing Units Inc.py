@@ -7,7 +7,7 @@ import us
 
 # Load filepaths
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
-os.chdir('../../../')
+os.chdir('../../')
 with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
@@ -316,10 +316,12 @@ uninc_raw = [changes[region]['Unincorporated'][1] for region in regions]
 ax1.bar(x - width / 2, inc_raw, width, label='Incorporated', color='blue')
 ax1.bar(x + width / 2, uninc_raw, width, label='Unincorporated', color='orange')
 ax1.set_ylabel('Housing Units Added (Millions)', fontsize=font_size)
-ax1.set_title('Raw Number of Housing Units Added (2000-2020)', fontsize=font_size)
+ax1.set_title('Housing Unit Growth By Incorporation Status in 2000', fontsize=font_size)
 ax1.set_xticks(x)
 ax1.set_xticklabels(regions, fontsize=font_size)
+# Add a title to the legend
 ax1.legend(fontsize=font_size)
+
 
 ax1.tick_params(axis='both', which='major', labelsize=font_size)
 
@@ -351,14 +353,18 @@ lims = [
 ax2.plot(lims, lims, 'k-', alpha=0.75, zorder=0)
 
 ax2.set_title('Comparison of Housing Unit Growth Rates (2000-2020)\nSouth and West Regions', fontsize=font_size)
-ax2.set_xlabel('Incorporated Housing Unit Growth Rate (%)', fontsize=font_size)
-ax2.set_ylabel('Unincorporated Housing Unit Growth Rate (%)', fontsize=font_size)
+ax2.set_xlabel('Incorporated in 2000 Growth Rate (%)', fontsize=font_size)
+ax2.set_ylabel('Unincorporated in 2000 Growth Rate (%)', fontsize=font_size)
 
 ax2.tick_params(axis='both', which='major', labelsize=font_size)
 
 adjust_text(texts, arrowprops=dict(arrowstyle='->', color='gray'))
 
 plt.tight_layout()
+
+# Change to the directory containing your data
+os.chdir(r"C:\Users\Dan's Laptop\Dropbox\Inclusionary Zoning\Github\ai-zoning")
+
 
 # Save figure to figures folder
 fig.savefig(os.path.join(config['figures_path'], 'Figure X - Growth in Housing Units Inc.png'))

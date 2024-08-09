@@ -218,7 +218,9 @@ def create_data_dict(municipalities_with_text, municipalities_without_text, muni
 
     condition_no_answer = municipalities_with_text['CENSUS_ID_PID6'].apply(lambda x: np.isnan(muni_answer_map.get(x, np.nan)))
 
-    if question in yes_no_qs:
+    question_number = question.split(' ')[1]
+
+    if question_number in yes_no_qs:
         condition_yes = municipalities_with_text['CENSUS_ID_PID6'].apply(lambda x: muni_answer_map.get(x, '') == 1.0)
         condition_no = municipalities_with_text['CENSUS_ID_PID6'].apply(lambda x: muni_answer_map.get(x, '') == 0.0)
         data_dict['Yes'] = {'data': municipalities_with_text[condition_yes], 'color': '#1E90FF'}
@@ -226,10 +228,17 @@ def create_data_dict(municipalities_with_text, municipalities_without_text, muni
     else:
         municipalities_with_text['Answer'] = municipalities_with_text['CENSUS_ID_PID6'].apply(
             lambda x: muni_answer_map.get(x, np.nan))
-        min_answer = municipalities_with_text['Answer'].min()
-        max_answer = municipalities_with_text['Answer'].max()
-        data_dict['Numerical'] = {'data': municipalities_with_text, 'cmap': 'Reds', 'vmin': min_answer,
-                                  'vmax': max_answer}
+
+        # Calculate quantiles
+        quantiles = municipalities_with_text['Answer'].quantile([0, 0.2, 0.4, 0.6, 0.8, 1])
+
+        data_dict['Numerical'] = {
+            'data': municipalities_with_text,
+            'cmap': plt.get_cmap('Reds'),  # Create colormap object
+            'vmin': quantiles.iloc[0],
+            'vmax': quantiles.iloc[-1],
+            'quantiles': quantiles
+        }
 
     if not municipalities_without_text.empty:
         data_dict["Out of Sample"] = {'data': municipalities_without_text, 'color': '#D3D3D3'}
@@ -270,7 +279,7 @@ def assign_z_order(gdf):
                 gdf.at[idx, 'z_order'] = 1  # This shape contains another, so it goes on the bottom
 
     return gdf
-
+##
 
 def plot_density_map(gdf_municipalities, gdf_counties, gdf_water_area, block_data, boundaries, city, figures_path):
 
@@ -299,7 +308,7 @@ def plot_density_map(gdf_municipalities, gdf_counties, gdf_water_area, block_dat
     block_data['Intersect'] = block_data.index.isin(intersecting_blocks.index)
 
     # Standalone Map
-    color_county = '#A9A9A9'  # Darker gray for counties
+    color_county = 'white'  # White as baseline for counties
 
     # Create a new figure for the standalone map with legend
     fig_standalone, ax_standalone = plt.subplots(figsize=(8, 10),
@@ -318,18 +327,27 @@ def plot_density_map(gdf_municipalities, gdf_counties, gdf_water_area, block_dat
     block_data[~block_data['Intersect']].plot(ax=ax_standalone, column='Density', cmap=cmap_red, norm=norm,
                                               edgecolor='none')
 
-    # Add color bars
-    cbar_ax1 = fig_standalone.add_axes([0.9, 0.2, 0.02, 0.6])  # Adjust the position and size of the color bar
+    # Add horizontal color bars below the map
+    cbar_ax1 = fig_standalone.add_axes([0.3, 0.185, 0.6, 0.02])  # Adjust the position and size of the first color bar
     sm1 = plt.cm.ScalarMappable(cmap=cmap_red, norm=norm)
     sm1.set_array([])
-    fig_standalone.colorbar(sm1, cax=cbar_ax1, ticks=[])  # Remove ticks/labels from the first color bar
+    cbar1 = fig_standalone.colorbar(sm1, cax=cbar_ax1, orientation='horizontal',
+                                    ticks=[])  # Remove ticks/labels from the first color bar
 
-    cbar_ax2 = fig_standalone.add_axes([0.93, 0.2, 0.02, 0.6])  # Adjust the position and size of the color bar
+    cbar_ax2 = fig_standalone.add_axes([0.3, 0.155, 0.6, 0.02])  # Adjust the position and size of the second color bar
     sm2 = plt.cm.ScalarMappable(cmap=cmap_green, norm=norm)
     sm2.set_array([])
-    cbar2 = fig_standalone.colorbar(sm2, cax=cbar_ax2, format='%.2f')  # Round labels to the hundredths place
-    cbar2.ax.tick_params(labelsize=12)  # Increase the font size of the colorbar labels
-    cbar2.set_label('Housing Units per Acre (2020)', fontsize = 12)  # Add a label to the second color bar
+    cbar2 = fig_standalone.colorbar(sm2, cax=cbar_ax2, orientation='horizontal',
+                                    format='%.2f')  # Round labels to the hundredths place
+    cbar2.ax.tick_params(labelsize=10)  # Adjust the font size of the colorbar labels
+
+    # Add labels for the color bars
+    fig_standalone.text(0.22, 0.193, 'Unincorporated', ha='center', va='center', fontsize=10)
+    fig_standalone.text(0.22, 0.163, 'Incorporated', ha='center', va='center', fontsize=10)
+    fig_standalone.text(0.6, 0.12, 'Housing Units per Acre (2020)', ha='center', va='center', fontsize=12)
+
+    # Adjust the main plot to make space for the color bars
+    fig_standalone.subplots_adjust(bottom=0.15)
 
     # Adjust the main plot to make space for the color bars
     fig_standalone.subplots_adjust(right=0.88)
@@ -338,7 +356,6 @@ def plot_density_map(gdf_municipalities, gdf_counties, gdf_water_area, block_dat
     ax_standalone.add_patch(
         mpatches.Rectangle((boundaries[0], boundaries[2]), boundaries[1] - boundaries[0], boundaries[3] - boundaries[2],
                            fill=False, edgecolor='black', linewidth=1))
-    ax_standalone.set_title(city, fontsize=15)
     ax_standalone.set_xlim(boundaries[0:2])
     ax_standalone.set_ylim(boundaries[2:])
     ax_standalone.set_xticks([])
@@ -358,7 +375,13 @@ def plot_density_map(gdf_municipalities, gdf_counties, gdf_water_area, block_dat
 
     return
 
+
+
+
 def plot_map(data_dict, gdf_counties, gdf_water_area, boundaries, city, question_text, figures_path, question):
+    '''
+    boundaries = params['boundaries']
+    '''
 
     #Standalone Map
     color_county = '#A9A9A9'  # Darker gray for counties
@@ -378,7 +401,10 @@ def plot_map(data_dict, gdf_counties, gdf_water_area, boundaries, city, question
         grouped = info['data'].groupby('z_order')
         for z_order, group in grouped:
             if label == 'Numerical':
-                group.plot(ax=ax_standalone, column='Answer', cmap=info['cmap'], vmin=info['vmin'], vmax=info['vmax'],
+                # Convert quantiles to a list
+                quantile_values = info['quantiles'].tolist()
+                norm = mcolors.BoundaryNorm(quantile_values, info['cmap'].N)
+                group.plot(ax=ax_standalone, column='Answer', cmap=info['cmap'], norm=norm,
                            edgecolor='black', zorder=z_order)
             elif label == 'Out of Sample':
                 group.plot(ax=ax_standalone, color=info['color'], edgecolor='black', zorder=z_order-1)
@@ -387,10 +413,17 @@ def plot_map(data_dict, gdf_counties, gdf_water_area, boundaries, city, question
 
             if need_plot_label:
                 if label == 'Numerical':
-                    sm = plt.cm.ScalarMappable(cmap=info['cmap'],
-                                               norm=plt.Normalize(vmin=info['vmin'], vmax=info['vmax']))
+                    sm = plt.cm.ScalarMappable(cmap=info['cmap'], norm=norm)
                     sm._A = []
                     cbar = fig_standalone.colorbar(sm, ax=ax_standalone, fraction=0.046, pad=0.04)
+
+                    # Set integer ticks
+                    cbar.set_ticks(quantile_values)
+                    cbar.set_ticklabels([f'{int(q):,}' for q in quantile_values])
+
+                    # Add label to colorbar
+                    cbar.set_label('Square Feet', rotation=270, labelpad=15)
+
                     legend_handles.append(cbar)
                 else:
                     patch = mpatches.Patch(color=info['color'], label=label)
@@ -401,7 +434,6 @@ def plot_map(data_dict, gdf_counties, gdf_water_area, boundaries, city, question
     ax_standalone.add_patch(
         mpatches.Rectangle((boundaries[0], boundaries[2]), boundaries[1] - boundaries[0], boundaries[3] - boundaries[2],
                            fill=False, edgecolor='black', linewidth=1))
-    ax_standalone.set_title('Question: '+question_text+'\n'+city, fontsize=15)
     ax_standalone.set_xlim(boundaries[0:2])
     ax_standalone.set_ylim(boundaries[2:])
     ax_standalone.set_xticks([])
@@ -426,13 +458,11 @@ def plot_map(data_dict, gdf_counties, gdf_water_area, boundaries, city, question
     # Close the figure to free up memory
     plt.close(fig_standalone)
 
-
 def load_data_for_muni_and_question( params, question, results, shape_path, gdf_municipalities):
     state_fipses = params['fips']
 
     #Filter for state
-    res = results[results['FIPS_STATE'].astype(str).isin(state_fipses)]
-
+    res = results[results['FIPS_STATE'].astype(str).str.zfill(2).isin(state_fipses)]
 
     #Get all ids
     all_ids = res['CENSUS_ID_PID6'].tolist()
@@ -447,6 +477,7 @@ def load_data_for_muni_and_question( params, question, results, shape_path, gdf_
     data_dict = create_data_dict(municipalities_with_text, municipalities_without_text, muni_answer_map, question)
 
     return data_dict
+
 
 def calculate_city_boundaries(full_params):
     for city, params in full_params.items():
@@ -471,9 +502,9 @@ full_params = {
 'Atlanta': {'abbrev': ['ga'], 'fips': ['13'], 'lat': 33.7488, 'long': -84.3877, 'loc': 'upper left'},
 'San Francisco': {'abbrev': ['ca'], 'fips': ['06'], 'lat': 37.7749, 'long': -122.4194, 'loc': 'lower left'},
 'Chicago': {'abbrev': ['il', 'in'], 'fips': ['17', '18'], 'lat': 41.8781, 'long': -87.6298, 'loc': 'upper right'},
-#'Philadelphia': {'abbrev': ['pa','nj','de'], 'fips': ['42','34','10'], 'lat': 39.9526, 'long': -75.1652, 'loc': 'upper left'},
+'Philadelphia': {'abbrev': ['pa','nj','de'], 'fips': ['42','34','10'], 'lat': 39.9526, 'long': -75.1652, 'loc': 'upper left'},
 #'Boston': {'abbrev': ['ma'], 'fips': ['25'], 'lat': 42.3601, 'long': -71.0589, 'loc': 'upper left'},
-'Houston': {'abbrev': ['tx'], 'fips': ['48'], 'lat': 29.7604, 'long': -95.3698, 'loc': 'upper left'},
+#'Houston': {'abbrev': ['tx'], 'fips': ['48'], 'lat': 29.7604, 'long': -95.3698, 'loc': 'upper left'},
 }
 
 #full_params['New York City'] = {'abbrev': ['ny', 'nj', 'ct'], 'fips': ['36', '34', '09'], 'lat': 40.7128, 'long': -74.0060, 'loc': 'upper right'}
@@ -515,12 +546,15 @@ for city, params in full_params.items():
     #Make housing unit density map
     plot_density_map(gdf_municipalities, gdf_counties, gdf_water_area,block_data, params['boundaries'], city, figures_path)
 
+
+
     for question, question_text in question_map.items():
         print(question)
 
 
         # Load the data for the current municipality and question
         data_dict = load_data_for_muni_and_question( params, question, results, shape_path, gdf_municipalities)
+
 
         # Plot the map
         plot_map(data_dict, gdf_counties, gdf_water_area, params['boundaries'], city, question_text, figures_path, question)

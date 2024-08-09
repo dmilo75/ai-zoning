@@ -52,7 +52,7 @@ question_mapping = {
 ##
 
 
-data = pd.read_excel(r"C:\Users\Dan's Laptop\Dropbox\Inclusionary Zoning\Github\ai-zoning\processed data\Model Output\latest_combined\Comprehensive Data.xlsx")
+data = pd.read_excel(r"C:\Users\Dan's Laptop\Dropbox\Inclusionary Zoning\Github\ai-zoning\processed data\Model Output\augest_latest\Comprehensive Data.xlsx")
 
 data['Region'] = data['State'].str.upper().map(state_to_region)
 
@@ -142,7 +142,7 @@ plot_percentile_heatmap_with_bars(
     data,
     x_col='Median_Home_Value_2022',
     y_col='All Unit Permits',
-    hue_col='First_PC',
+    hue_col='Second_PC',
     num_buckets=8,
     label_map=label_map
 )

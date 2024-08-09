@@ -80,7 +80,7 @@ def create_batch(batch_data):
     # Return the batch ID using attribute access
     return response.id
 
-def generate_completion(model, messages, tools, request, response_format = 'text'):
+def generate_completion(model, messages, tools, request, response_format = {"type": "text"}):
     completion = client.chat.completions.create(
         model=model,
         messages=messages,

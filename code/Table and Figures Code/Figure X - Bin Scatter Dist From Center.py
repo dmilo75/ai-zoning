@@ -53,45 +53,41 @@ question_mapping = {
 
 ##Function to make bin scatters
 
-def fit_line(x, y, fit_type='linear'):
-    x, y = x.dropna(), y.dropna()
-    if fit_type == 'linear':
-        p = np.polyfit(x, y, 1)
-        return p
 
-def make_bin(ax, question, question_label, data, region=True,max_distance = 50):
+def make_bin(ax, question, question_label, data, region=True, max_distance=50):
     if region:
         groups = data['Region'].unique()
+        colors = ['#4E79A7', '#F28E2B', '#E15759', '#59A14F']  # Varied and aesthetically pleasing colors for regions
+
+
+
     else:
         groups = [None]
+        colors = ['#FF5733']  # Single color for overall
 
-    for group in groups:
+    for idx, group in enumerate(groups):
         if group is not None:
             group_data = data[data['Region'] == group]
         else:
             group_data = data
 
         group_data = group_data[group_data['Miles to Metro Center'] <= max_distance]
-
         group_data = group_data.dropna(subset=['Miles to Metro Center', question])
 
-        dummies = pd.get_dummies(group_data['Nearest Metro Name'], drop_first=True)
-        group_data = pd.concat([group_data, dummies], axis=1)
+        msa_dummies = pd.get_dummies(group_data['Nearest Metro Name'], drop_first=True)
+        group_data = pd.concat([group_data, msa_dummies], axis=1)
 
+        # Compute bin scatter with fixed effects
+        w = msa_dummies.values
+        est_fe = binsreg(y=question, x='Miles to Metro Center', data=group_data, noplot=True, polyreg=1)
+        result_fe = est_fe.data_plot[0]
+        dots_fe = pd.DataFrame(result_fe.dots)
 
-        est = binsreg(y=question, x='Miles to Metro Center', data=group_data, binsmethod='dpi', noplot=True, polyreg = 1)
-        result = est.data_plot[0]
-        dots = pd.DataFrame(result.dots)
-
-        ax.scatter(dots['x'], dots['fit'], s=20,
-                   label=f'{group if group else "Overall"}')
+        ax.scatter(dots_fe['x'], dots_fe['fit'], s=20, color=colors[idx % len(colors)], label=f'{group if group else "Overall"}')
 
         # Add dashed line plot from the 'poly' param
-        poly = pd.DataFrame(result.poly)
-        ax.plot(poly['x'], poly['fit'], linestyle='--')
-
-
-
+        poly_fe = pd.DataFrame(result_fe.poly)
+        ax.plot(poly_fe['x'], poly_fe['fit'], linestyle='--', color=colors[idx % len(colors)])
 
     ax.set_xlabel('Miles to Metro Center')
     ax.set_ylabel(question_label)
@@ -99,8 +95,9 @@ def make_bin(ax, question, question_label, data, region=True,max_distance = 50):
     ax.legend()
 
 
+
 ##
-data = pd.read_excel(os.path.join(config['processed_data'], 'Model Output','latest_combined', 'Comprehensive Data.xlsx'))
+data = pd.read_excel(os.path.join(config['processed_data'], 'Model Output','augest_latest', 'Comprehensive Data.xlsx'))
 
 data['Region'] = data['State'].str.upper().map(state_to_region)
 
@@ -118,7 +115,7 @@ for i, question in enumerate(questions_to_plot):
     row = i // 2
     col = i % 2
     question_label = question_mapping.get(question, question)
-    make_bin(axs[row, col], question, question_label, data, region=True, fit_type='linear', fit_on_binned=False)
+    make_bin(axs[row, col], question, question_label, data, region=True, max_distance = 50)
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 #Save figure to figures folder

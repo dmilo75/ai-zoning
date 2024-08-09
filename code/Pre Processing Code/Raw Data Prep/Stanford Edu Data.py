@@ -17,6 +17,8 @@ raw_path = config['raw_data']
 # Load the data
 bridge = pd.read_csv(os.path.join(data_path,'School District Geobridge','muni_school_district_bridge.csv'))
 
+
+
 # Calculate coverage percentages
 bridge['Muni_Coverage'] = bridge['Intersection_Area'] / bridge['Muni_Area']
 bridge['School_Coverage'] = bridge['Intersection_Area'] / bridge['School_Area']

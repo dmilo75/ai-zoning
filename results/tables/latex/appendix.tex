@@ -1,0 +1,466 @@
+\section*{Appendix: Question Details}
+This appendix provides detailed information about each question used in the study. Each question is presented with its original phrasing by the Pioneer Institute, the text that we embed for the question, background information and assumptions, question type, and the rephrased question that the language model sees. For some questions, we also include a value that triggers double-checking if the model's answer does not match it, along with the rephrased question used for double-checking and the keywords used to build context during the double-checking process. Additionally, certain questions involve subtasks, which are described in detail.
+
+\subsection*{Question 4}
+\noindent\textbf{Question Phrased by Pioneer:} Is multi-family housing allowed, either by right or special permit (including through overlays or cluster zoning)?
+
+\noindent\textbf{Question Text That We Embed:} Is multi-family housing allowed, either by right or special permit (including through overlays or cluster zoning)?
+
+\noindent\textbf{Question Background and Assumptions:} Multi-family housing comes in a wide variety of forms and sizes. The ways municipalities define and categorize “multi-family” housing varies widely, as do the use-regulations that govern multi-family housing development. This study includes as “multi-family” any building with three or more dwelling units. Multi-family dwelling units can be rental or condominium. They can be in a freestanding residential building or part of a mixed-use building, new construction or conversion of a preexisting building. Zoning documents usually specify what kinds of buildings qualify for conversion to multi-family housing: single family houses, two family houses, mills, schools, churches, municipal buildings or other types of facilities. Freestanding new "Multi-family" housing is defined as any building with three or more dwelling units, excluding townhouses, unless a municipality includes townhouses in its broader definition of multi-family housing and effectively permits only townhouses as such. Assisted living facilities, congregate care homes, dormitories, and lodging houses are not considered multi-family housing. If the zoning laws allow for conversion to multi-family housing, but do not comment on whether new multi-family housing is allowed, then the answer is 'YES'. Most towns allow a form of multi-family housing.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Is multi-family housing allowed at all in any district or overlay? If multi-family housing is allowed by special permission in any district or overlay then that counts allowed.
+
+\vspace{1cm}
+\subsection*{Question 5}
+\noindent\textbf{Question Phrased by Pioneer:} Are apartments above commercial (mixed use) allowed in any district?
+
+\noindent\textbf{Question Text That We Embed:} Are apartments above commercial (mixed use) allowed in any district?
+
+\noindent\textbf{Question Background and Assumptions:} Zoning bylaws and ordinances in various municipalities often contain provisions for combining residential dwellings with commercial uses such as retail or office spaces, creating mixed-use developments. While some zoning regulations explicitly allow multi-family housing and retail to coexist within the same district, they may not clarify whether these uses can share the same building, leaving this to be determined in practice. Certain municipalities explicitly permit "combined dwelling/retail" configurations in their use regulation tables, sometimes noting that any uses allowed within the same district can occupy the same building. Additionally, detailed provisions for mixed-use are facilitated through special zoning arrangements like overlay districts (e.g., mixed use district, downtown overlay, or planned unit development) or conversion projects, such as transforming former mills to accommodate both retail and housing. However, it's important to note that some references to "mixed use" may actually pertain to commercial and industrial combinations, excluding residential components. If you cannot find any reference to residential and commercial uses in the same building within the context then you assume that the answer is 'NO'.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Is a combination of commercial and residential uses in the same building  or structure allowed in any zoning district?
+
+\vspace{1cm}
+\subsection*{Question 6}
+\noindent\textbf{Question Phrased by Pioneer:} Is multi-family housing listed as allowed through conversion (of either single family homes or non residential buildings)?
+
+\noindent\textbf{Question Text That We Embed:} Is multi-family housing listed as allowed through conversion (of either single family homes or non residential buildings)?
+
+\noindent\textbf{Question Background and Assumptions:} The development of multifamily housing through the conversion of existing buildings encompasses two primary approaches: transforming single-family or two-family houses into structures with at least three units, and repurposing non-residential buildings, such as mills, other industrial buildings, schools, and municipal buildings, for multi-family residential use. This is different from the ability to construct new multi-family housing. The conversion of non-residential structures often occurs through designated overlay districts, like Mill Conversion Overlay Districts, or within industrial zones, whereas the conversion of houses to accommodate more units typically takes place in residential or business districts. The question does not count the conversion of single-family homes into two-family dwellings as allowing conversion to multi-family dwellings because multi-family is defined as having at least three units. If the conversion requires a special permit then we consider that as allowing conversion.  Assisted living facilities, congregate care homes, dormitories, and lodging houses are not considered multi-family housing. The allowance of multi-family housing does not imply the allowance of the conversion to multi-family housing. You must search for an explicit statement allowing the conversion to multi-family housing from another type of structure. If you do not find any mention of conversions in the context then you assume the answer is 'NO'.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} In any district, is the conversion to multi-family explictly allowed under any scope?
+
+
+\noindent\textbf{If The Answer Is Not This Value Then We Double Check:} Yes
+
+\noindent\textbf{Rephrased Question the LLM Sees When Double Checking:} In any district, is the conversion to multi-family explictly allowed under any scope?
+
+
+\noindent\textbf{Keywords We Use to Build Context When Double Checking in Order of Importance:}
+\noindent 'conver'
+\vspace{1cm}
+\subsection*{Question 8}
+\noindent\textbf{Question Phrased by Pioneer:} Are attached single family houses (townhouses, 3+ units) listed as an allowed use (by right or special permit)?
+
+\noindent\textbf{Question Text That We Embed:} Are attached single family houses (townhouses, 3+ units) listed as an allowed use (by right or special permit)?
+
+\noindent\textbf{Question Background and Assumptions:} The question asks whether some form of attached housing is allowed in the municipality. Common forms of attached housing are single-family attached homes, townhouses, rowhouses, and zero lot line dwelling units. Attached housing is often allowed through special zoning provisions, such as overlay districts or use provisions tailored for cluster developments, Planned Unit Developments (PUD), or communities for active adults aged 55 and over. Remember that accessory apartments to a single-family home or the ability to attach one unit to a single-family home do not count as attached housing. Duplexes also do not count as attached housing. A form of attached housing may be listed as a type of single-family or multi-family housing. However, the allowance of single-family or multi-family housing does not imply the allowance of attached housing. This context raises the question of whether any type of attached housing are allowed either as their own category of housing or explicitly as a type of single family or multi-family housing. If you do not find any mention of a type of attached housing in the context then you assume that the answer is 'NO'.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Is some form of attached housing allowed in any district of the town?
+
+\noindent\textbf{If The Answer Is Not This Value Then We Double Check:} Yes
+
+\noindent\textbf{Rephrased Question the LLM Sees When Double Checking:} Is some form of attached housing allowed in any district of the town?
+
+\noindent\textbf{Keywords We Use to Build Context When Double Checking in Order of Importance:}
+\noindent 'town house', 'town houses', 'townhouse', 'townhouses', 'attached dwelling', 'attached dwellings', 'row house', 'row houses', 'rowhouse', 'rowhouses', 'attached single family', 'attached unit', 'attached units', and 'attached'
+\vspace{1cm}
+\subsection*{Question 9}
+\noindent\textbf{Question Phrased by Pioneer:} Does zoning include any provisions for housing that is restricted by age?
+
+\noindent\textbf{Question Text That We Embed:} Does zoning include any provisions for housing that is restricted by age?
+
+\noindent\textbf{Question Background and Assumptions:} Many zoning bylaws/ordinances include provisions for housing that is deed restricted to occupants 55 (or another age) and older. Some of the provisions are for developments that are entirely age-restricted, while other provisions are incentives, often density bonuses, to include age-restricted units within an unrestricted development, such as cluster or multi-family. The restricted developments are called active adult housing, adult retirement village, senior village, planned retirement community, or something similar.
+
+The answer should be Yes if any provisions exist for age-restricted single-family, townhouse, duplex, multi-family or accessory apartments. Provisions can be in the form of an age-restricted overlay, cluster development, density bonus for age-restricted units, or other zoning requirements or incentives for age-restricted housing.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Does zoning include any provisions for housing that is restricted by age?
+
+\vspace{1cm}
+\subsection*{Question 11}
+\noindent\textbf{Question Phrased by Pioneer:} Are accessory or in-law apartments allowed (by right or special permit) in any district?
+
+\noindent\textbf{Question Text That We Embed:} Are accessory or in-law apartments allowed (by right or special permit) in any district?
+
+\noindent\textbf{Question Background and Assumptions:} Accessory dwellings are separate housing units typically created in surplus or specially added space in owner-occupied single-family homes. Accessory dwellings can also be attached to the primary dwelling or be situated on the same lot (for example in a carriage house or small cottage.) An accessory dwelling typically has its own kitchen and bathroom facilities, not shared with the principal residence. Many zoning bylaws/ordinances call the dwellings “in-law apartments” or “family apartments” and restrict their occupancy to relatives of the homeowner - “related by blood, marriage or adoption.” Some of these also allow domestic employees, caregivers, elderly people or people with low incomes to live in the units. Some municipalities allow the apartment by right if a family member will occupy the accessory apartment, but require a special permit otherwise. If you cannot find any reference to accessory apartments in the context then you assume that the answer is 'NO'.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Are accessory or in-law apartments allowed in any district? If they are allowed by special permit in any district then we count that as allowed.
+
+\vspace{1cm}
+\subsection*{Question 13}
+\noindent\textbf{Question Phrased by Pioneer:} Is cluster development, planned unit development, open space residential design, or another type of flexible zoning allowed by right?
+
+\noindent\textbf{Question Text That We Embed:} Is cluster development, planned unit development, open space residential design, or another type of flexible zoning allowed by right?
+
+\noindent\textbf{Question Background and Assumptions:} Flexible zoning, encompassing terms like open space residential design, cluster, planned unit development, or conservation subdivision, provides municipalities with a more adaptable approach to zoning beyond the traditional “as-of-right” options. This methodology allows developers to bypass the stringent requirements of standard zoning, such as specific lot sizes and setback mandates, and enables the incorporation of various residential unit types like townhouses, duplexes, and multi-family homes that might not be allowed under conventional zoning regulations. The question only considers provisions that are primarily for residential uses. Most municipalities require special permits for cluster/flexible development.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Is the answer yes to any of the following question?
+Question 1: Is cluster development allowed explictly by right in any district?
+Question 2: Is open space residential design allowed explictly by right in any district?
+Question 3: Is any type of flexible zoning other than cluster development and open space residential design allowed explictly by right in any district?
+
+\vspace{1cm}
+\subsection*{Question 14}
+\noindent\textbf{Question Phrased by Pioneer:} Is cluster development, planned unit development, open space residential design, or another type of flexible zoning allowed by special permit?
+
+\noindent\textbf{Question Text That We Embed:} Is cluster development, planned unit development, open space residential design, or another type of flexible zoning allowed by special permit?
+
+\noindent\textbf{Question Background and Assumptions:} Flexible zoning, encompassing terms like open space residential design, cluster, planned unit development, or conservation subdivision, provides municipalities with a more adaptable approach to zoning beyond the traditional “as-of-right” options. This methodology allows developers to bypass the stringent requirements of standard zoning, such as specific lot sizes and setback mandates, and enables the incorporation of various residential unit types like townhouses, duplexes, and multi-family homes that might not be allowed under conventional zoning regulations. The question only considers provisions that are primarily for residential uses. Most municipalities require special permits for cluster/flexible development so if you find suggestive evidence that the municipality allows cluster/flexible development by special permit then you assume that the answer is 'YES'.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Is the answer yes to any of the following question?
+Question 1: Is cluster development allowed in any district, including by special permit?
+Question 2: Is open space residential design allowed in any district, including by special permit?
+Question 3: Is any type of flexible zoning other than cluster development and open space residential design allowed in any district, including by special permit?
+
+\vspace{1cm}
+\subsection*{Question 17}
+\noindent\textbf{Question Phrased by Pioneer:} Does the zoning bylaw/ordinance include any mandates or incentives for development of affordable units?
+
+\noindent\textbf{Question Text That We Embed:} Does the zoning bylaw/ordinance include any mandates or incentives for development of affordable units?
+
+\noindent\textbf{Question Background and Assumptions:} Inclusionary zoning requires or encourages developers to include affordable dwelling units within new developments of market rate homes. Some municipalities call it “incentive zoning” - when provision of affordable units is voluntary. The affordable units are typically located on site, but some municipalities also allow off-site development under certain circumstances. Often, payments may be made to a trust fund in lieu of building housing. Housing designated as “affordable” must be restricted by deed or covenant, usually for a period of 30 or more years, to residents with low or moderate incomes. The deed restrictions also limit sales prices and rents as the units are vacated, sold or leased to new tenants. 
+
+Do not include provisions for entirely affordable, subsidized housing development by public or non-profit corporations. Also do not include provisions under “rate of development” headings that exempt affordable units from project phasing and growth caps.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Does the zoning bylaw/ordinance include any mandates or incentives for development of affordable units?
+
+\vspace{1cm}
+\subsection*{Question 20}
+\noindent\textbf{Question Phrased by Pioneer:} Is there a town-wide annual or biannual cap on residential permits issued, and/or is project phasing required?
+
+\noindent\textbf{Question Text That We Embed:} Is there a town-wide annual or biannual cap on residential permits issued, and/or is project phasing required?
+
+\noindent\textbf{Question Background and Assumptions:} Some municipalities enact town-wide caps limiting the number of units that can come on line annually or biannually. The number of permits is often set at the average in the previous years. Note that this question asks only about town-wide caps and does not consider caps exclusive to a specific district in the town. Some municipalities require phased growth for individual developments (also known as development scheduling or buildout scheduling) - a technique that allows for the gradual buildout of approved subdivisions over a number of years. Note that we only consider project phasing when it is required and not when it is optional. Project phasing is usually triggered by a minimum number of units in the project, so small subdivisions can be constructed in one year. Some phasing provisions are only triggered at the town-wide level once a threshold number of units have been permitted. Most of the “rate of development” provisions include an expiration or “sun set” date (some that have expired have been updated and re-adopted). Many include a “point system” where points are awarded for provision of community goods such as open space or affordable units, and projects with more points are given priority for permits. If you do not find any information in the context about a town-wide annual or biannual cap or about project phasing then you assume the answer is 'NO'.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Is the answer yes to any of the following question?
+Question 1: Is there a town-wide annual or biannual cap on residential permits issued
+Question 2: Is project phasing required?
+
+\vspace{1cm}
+\subsection*{Question 21}
+\noindent\textbf{Question Phrased by Pioneer:} Are there restrictions on counting wetlands, sloped land or easements in lot size calculations?
+
+\noindent\textbf{Question Text That We Embed:} How is lot area defined and how is the lot size calculated?
+
+\noindent\textbf{Question Background and Assumptions:} Remember to first review your research so far on how a lot size is calculated and defined. If you have already found a restriction on including wetlands, sloped land, or easements in your prior research then the answer is 'YES'.
+
+Some municipalities require that the minimum lot size requirement be met by a percentage of land that does not include wetland resource areas, steeply sloped land or easements. A subset of those municipalities requires that the buildable area be contiguous on the lot – called “contiguous buildable area” or “contiguous upland area.” Upland area is non-wetland area. It is much more common for municipalities to restrict the use of wetlands areas in meeting lot size requirements than sloped land or easements.
+
+Note that this question only asks about whether there are restrictions on calculating the lot size. It does not ask about whether there are restrictions to buildable area or whether there are any restrictions in wetland areas. 
+
+If you do not find any restrictions for lot size calculations in the context then you assume that the answer is 'NO'.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Detail how lot area is defined and how a lot size is calculated. Then, answer the question of are there restrictions on counting wetlands, uplands, or sloped land in lot area/lot size calculation?
+
+\noindent\textbf{If The Answer Is Not This Value Then We Double Check:} Yes
+
+\noindent\textbf{Rephrased Question the LLM Sees When Double Checking:} Are there restrictions on counting wetlands, sloped land or easements in lot size calculations?
+
+\noindent\textbf{Keywords We Use to Build Context When Double Checking in Order of Importance:}
+\noindent 'wetland', 'upland', 'sloped land', and 'easement'
+\vspace{1cm}
+\subsection*{Question 27}
+\noindent\textbf{Question Phrased by Pioneer:} What is the minimum lot size for each zoning district?
+
+\noindent\textbf{Question Text That We Embed:} What is the minimum lot size for each zoning district?
+
+\noindent\textbf{Question Background and Assumptions:} The question asks to provide a list of the minimum lot size in each district of the town. If a district has different minimum lot sizes depending on the type of building like for example a different minimum lot size for single-family homes than for multi-family homes, then you pick the smaller of the minimum lot sizes. If a district allows smaller minimum lot sizes for historic properties or by special permission then you pick the standard minimum lot size for current buildings. If a district only lists a minimum lot size for a specific type of housing like housing for the elderly, then you pick that minimum lot size. Your answer should be structured as a list with district name, minimum lot size, and units for the minimum lot size which are usually square feet or acres. If a minimum lot size for a district is reported in both acres and square feet then only report it in square feet. If a district does not have a minimum lot size then record the town wide minimum lot size for that district if a town wide minimum lot size exists. If a town wide minimum lot size does not exist and a district does not have a minimum lot size then exclude it from your answer.
+
+\noindent\textbf{Question Type:} Lot Size
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the minimum lot size for each zoning district?
+
+\noindent\textbf{Subtask:}
+\begin{itemize}
+\item Subtask Question That Gets Embedded: List out each district in the town
+\item Rephrased Subtask Question the LLM Sees: List out each district in the town
+\item Additional Subtask Instructions: Please list out the name of each district in the town. Do not include overlay districts.
+\item How The Subtask Results Are Described to the LLM Afterwards: List of all districts to find the minimum lot size for
+\end{itemize}
+
+\vspace{1cm}
+\subsection*{Question 28}
+\noindent\textbf{Question Phrased by Pioneer:} What is the minimum lot size for single-family homes in each residential district?
+
+\noindent\textbf{Question Text That We Embed:} What is the minimum lot size for single-family homes in each residential district?
+
+\noindent\textbf{Question Background and Assumptions:} When compiling a list of minimum lot sizes for districts that permit single-family housing, prioritize clarity by selecting the specific minimum lot size for single-family homes within each district. If multiple options exist, choose the most common standard size, excluding sizes for historic properties or special cases. Report sizes in square feet over acres unless only acre measurements are available. Only include districts with a defined minimum lot size or those adhering to a town-wide minimum if no district-specific size is established. Finalize the data in a CSV format with columns for 'District Name', 'Min Lot Size', 'Unit', and 'Estate', ensuring a straightforward, single entry for each district that reflects the standard requirement for single-family homes.
+
+\noindent\textbf{Question Type:} Lot Size
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the minimum lot size for single-family homes in each residential district?
+
+\noindent\textbf{Subtask:}
+\begin{itemize}
+\item Subtask Question That Gets Embedded: Find the name of each district that allows single-family housing
+\item Rephrased Subtask Question the LLM Sees: Find the name of each district that allows single-family housing
+\item Additional Subtask Instructions: Please list out the name of each residential district in the town that primarily consist of detached single-family housing. If you cannot find any districts that explictly allow single-family detached housing then just assume that any residential districts allow single-family detached housing. Respond with a detailed answer followed by a CSV format with the name of the district in the first column and whether a district has the label 'Estate' in the second column as a True/False statement. Use the column headers of 'District Name' and 'Whether Estate District'.
+\item How The Subtask Results Are Described to the LLM Afterwards: Your previous work finding which districts to find minimum lot sizes for and whether they are estate districts
+\end{itemize}
+
+\vspace{1cm}
+\subsection*{Question 2}
+\noindent\textbf{Question Phrased by Pioneer:} How many zoning districts, including overlays, are in the municipality?
+
+\noindent\textbf{Question Text That We Embed:} How many zoning districts, including overlays, are in the municipality?
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} How many zoning districts and overlays are in the municipality?
+
+\vspace{1cm}
+\subsection*{Question 22}
+\noindent\textbf{Question Phrased by Pioneer:} What is the longest frontage requirement for single family residential development in any district?
+
+\noindent\textbf{Question Text That We Embed:} What is the longest frontage requirement for single family residential development in any district?
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the longest frontage requirement for single family residential development in any district?
+
+\noindent\textbf{Subtask:}
+\begin{itemize}
+\item Subtask Question That Gets Embedded: Find the name of each single-family residential district
+\item Rephrased Subtask Question the LLM Sees: Find the name of each single-family residential district
+\item Additional Subtask Instructions: Please list the names of each single-family residential district. Only include districts that are primarily residential. Usually, this means districts that start with the letter R like R1. If there is only one residential district that permits single-family zoning then just name that one district. If you are unsure whether a residential district permits single-family zoning then assume that it does, but ensure that the district is primarily residential. An agricultural (A) or industrial (I) district would not be included for example. 
+\item How The Subtask Results Are Described to the LLM Afterwards: Only consider the frontage requirements in the following districts
+\end{itemize}
+
+\vspace{1cm}
+\subsection*{Question 17w}
+\noindent\textbf{Question Phrased by Pioneer:} Do developers have to comply with the requirement to include affordable housing, however defined, in their projects?
+
+\noindent\textbf{Question Text That We Embed:} Do developers have to comply with the requirement to include affordable housing, however defined, in their projects?
+
+\noindent\textbf{Question Background and Assumptions:} Zoning codes may require developers to include affordable housing in market-rate residential projects, but the applicability of these requirements can vary. Some inclusionary policies apply broadly to all residential development, while others are tied to optional zoning designations, incentive programs, or specific areas.
+
+To determine if a zoning code contains a mandatory inclusionary requirement, look for clear language stating that all or most market-rate residential projects must provide affordable units as a standard condition of approval under normal zoning rules. The requirement should not be limited to projects that opt into a special zoning designation, participate in an incentive program, or are located in a particular overlay zone.
+
+Focus on whether the code unambiguously requires all or most market-rate residential development to include affordable housing under the generally applicable rules. Do not select "YES" if affordable housing is only mandatory in narrow, specialized situations. The mere presence of affordable housing provisions is not sufficient if they are elective or only apply in atypical circumstances. If the affordable housing requirements are not clearly universally applicable, the likely answer is "NO".
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Do developers have to comply with the requirement to include affordable housing, however defined, in their projects?
+
+\vspace{1cm}
+\subsection*{Question 30}
+\noindent\textbf{Question Phrased by Pioneer:} How many mandatory steps are involved in the approval process for a typical new multi-family building?
+
+\noindent\textbf{Question Text That We Embed:} How many mandatory steps are involved in the approval process for a typical new multi-family building?
+
+\noindent\textbf{Question Background and Assumptions:} The approval process for constructing a new multi-family building typically involves multiple mandatory steps, each representing a distinct interaction or requirement that a developer must fulfill before construction can begin. Focus on identifying only the core, pre-construction approval steps that are required for all multi-family building projects, from initial application submission to final permit issuance. Each required interaction with a distinct city department or agency should be counted as a separate step, but be careful not to artificially separate closely related actions within a single process. For example, applying for and obtaining a building permit should be considered one step, not two. Be cautious not to include optional or discretionary steps, post-approval activities such as inspections during construction or certificate of occupancy issuance, steps that are only required in specific circumstances or for certain types of properties, or internal processes within departments that don't require direct developer interaction. When analyzing the ordinances, pay close attention to language indicating whether a step is mandatory (e.g., "shall", "must", "is required") versus optional or conditional (e.g., "may", "at the discretion of", "if applicable"). The goal is to identify the minimum number of distinct, mandatory steps that every multi-family building project must go through in the approval process, avoiding redundancy and over-segmentation of closely related actions.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} How many mandatory steps are involved in the approval process for a typical new multi-family building?
+
+\vspace{1cm}
+\subsection*{Question 31}
+\noindent\textbf{Question Phrased by Pioneer:} For a typical new multi-family building project in this jurisdiction, how many distinct governing bodies or agencies must give mandatory approval before construction can begin?
+
+\noindent\textbf{Question Text That We Embed:} For a typical new multi-family building project in this jurisdiction, how many distinct governing bodies or agencies must give mandatory approval before construction can begin?
+
+\noindent\textbf{Question Background and Assumptions:} When answering this question, focus on the approval process for a typical new multi-family building project as described in the provided ordinance sections. Only count distinct governing bodies or agencies whose approval is explicitly required by the ordinances for all multi-family building projects, including those allowed "by right" under existing zoning.
+To be counted, an entity must have clear, independent approval authority that is mandatory for the project to proceed. This approval must be specifically for the multi-family project itself. Look for unambiguous language indicating required, independent approval steps. Distinguish between actual approval authority and advisory roles; entities that only review or provide input should not be counted.
+Consider roles like the Planning Board, Board of Health, Building Commissioner, and special permit granting authorities, but include them only if their approval is explicitly required and independent. For coordinated review processes, determine whether they represent multiple independent approvals or a single approval incorporating multiple inputs.
+Provide your answer as a number, followed by a brief explanation of which entities you counted and why. Cite relevant ordinance sections, explaining why each approval is considered independent and mandatory, and how it relates specifically to the multi-family project.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} For a typical new multi-family building project in this jurisdiction, how many distinct governing bodies or agencies must give mandatory approval before construction can begin?
+
+\vspace{1cm}
+\subsection*{Question 32}
+\noindent\textbf{Question Phrased by Pioneer:} Are there townwide requirements for public hearings on any type of multi-family residential projects?
+
+\noindent\textbf{Question Text That We Embed:} Are there townwide requirements for public hearings on any type of multi-family residential projects?
+
+\noindent\textbf{Question Background and Assumptions:} When answering this question, examine the zoning ordinances and bylaws for any townwide requirements that mandate public hearings or formal public input processes for multi-family residential developments. Focus on requirements that apply across all zones within the town. Answer YES if public hearings are required for any subset of multi-family projects, even if not all multi-family projects require hearings. For instance, if larger projects require public hearings while smaller ones don't, the answer should still be YES. Requirements specific to certain zones do not count towards a YES answer. Answer NO only if there are no townwide public hearing requirements for multi-family developments of any size or type, or if such requirements only apply in specific zones. Be sure to cite relevant ordinance sections that support your conclusion. The goal is to determine whether there is any mandated opportunity for public input on new multi-family housing developments on a townwide basis, even if this only applies to certain categories of multi-family projects.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Are there townwide requirements for public hearings on any type of multi-family residential projects?
+
+\noindent\textbf{Subtask:}
+\begin{itemize}
+\item Subtask Question That Gets Embedded: Do any types of multi-family housing projects require a special permit in this jurisdiction? If so, under what conditions?
+\item Rephrased Subtask Question the LLM Sees: What is the typical approval process for new multi-family building projects in this jurisdiction? Please describe any required permits, reviews, or other procedures that are standard for multi-family developments.
+\item Additional Subtask Instructions: Do any types of multi-family housing projects require a special permit in this jurisdiction? If so, under what conditions?
+\item How The Subtask Results Are Described to the LLM Afterwards: Special Permit Requirements for Multi-Family Housing Developments
+\end{itemize}
+
+\vspace{1cm}
+\subsection*{Question 34}
+\noindent\textbf{Question Phrased by Pioneer:} What is the maximum potential waiting time (in days) for government review of a typical new multi-family building?
+
+\noindent\textbf{Question Text That We Embed:} What is the maximum potential waiting time (in days) for government review of a typical new multi-family building?
+
+\noindent\textbf{Question Background and Assumptions:} The review process for constructing a new multi-family building involves several stages, each of which may have a specific waiting period. The total waiting time includes the mandatory review periods as well as any discretionary days that can be added by the governing bodies or agencies. Each agency or department that a developer must interact with, such as city government departments like fire, police, sanitation, building, and planning, has its own review timeline. Additionally, discretionary days that may be required for public hearings, environmental reviews, or other procedural requirements must also be added to the total count of government review days.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the maximum potential waiting time (in days) for government review of a typical new multi-family building?
+
+\vspace{1cm}
+\subsection*{Question 35}
+\noindent\textbf{Question Phrased by Pioneer:} What is the minimum cost of all explicitly stated fees and due diligence expenses for a typical new multi-family building?
+
+\noindent\textbf{Question Text That We Embed:} What is the minimum cost of all explicitly stated fees and due diligence expenses for a typical new multi-family building?
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the minimum cost of all explicitly stated fees and due diligence expenses for a typical new multi-family building?
+
+\vspace{1cm}
+\subsection*{Question 36}
+\noindent\textbf{Question Phrased by Pioneer:} How many mandatory steps are involved in the approval process for a typical new single-family home?
+
+\noindent\textbf{Question Text That We Embed:} How many mandatory steps are involved in the approval process for a typical new single-family home?
+
+\noindent\textbf{Question Background and Assumptions:} For this question, a "mandatory step" is defined as a required interaction with a distinct government entity or a required submission that must be approved before proceeding with the construction of a single-family home. When analyzing the provided ordinances, focus specifically on requirements for single-family homes or small residential projects. Consider only the most common scenario for building a single-family home on an existing, properly zoned lot, and identify any exemptions or simplified processes mentioned for such projects. Include only steps that are explicitly required by the ordinances for single-family homes, omitting optional steps or those that can be bypassed. Count interactions with different departments or agencies as separate steps, even if they occur simultaneously. For each step counted, cite the relevant section of the ordinance that mandates it for single-family homes. This approach should help identify the essential approval steps for single-family homes while accounting for potential variations in local regulations.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} How many mandatory steps are involved in the approval process for a typical new single-family home?
+
+\vspace{1cm}
+\subsection*{Question 37}
+\noindent\textbf{Question Phrased by Pioneer:} How many governing bodies or agencies need to approve a typical new single-family home?
+
+\noindent\textbf{Question Text That We Embed:} How many governing bodies or agencies need to approve a typical new single-family home?
+
+\noindent\textbf{Question Background and Assumptions:} When constructing a new single-family home, approval may be required from several governing bodies or agencies within a municipality. Each department that oversees any aspect of the construction process needs to be considered separately. For example, city government departments such as fire, police, sanitation, building, and planning are distinct entities, and their approval represents additional steps in the construction approval process. Even if construction of the single-family home is allowed "by right" (i.e., permitted under existing zoning laws without needing special permissions or variances), approval may still be required from some entities to ensure safety and conformity with current laws.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} How many governing bodies or agencies need to approve a typical new single-family home?
+
+\vspace{1cm}
+\subsection*{Question 38}
+\noindent\textbf{Question Phrased by Pioneer:} Does a typical new single-family home require a public hearing or public input process?
+
+\noindent\textbf{Question Text That We Embed:} Does a typical new single-family home require a public hearing or public input process?
+
+\noindent\textbf{Question Background and Assumptions:} The question investigates whether a typical new single-family home requires a public hearing or a public input process. Public hearings or public input processes are formal events where stakeholders, including residents, have the opportunity to express their opinions, concerns, or support for a proposed development. These processes are often mandated by zoning bylaws or ordinances to ensure transparency and community involvement in significant developmental projects. The need for such hearings can vary widely depending on the municipality's regulations, and they often involve presentations, discussions, and sometimes votes by local government bodies. The aim is to ensure that the development aligns with community standards and expectations, addressing potential impacts on the neighborhood, infrastructure, and environment.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Does a typical new single-family home require a public hearing or public input process?
+
+\vspace{1cm}
+\subsection*{Question 39}
+\noindent\textbf{Question Phrased by Pioneer:} Does a typical new single-family home require approval from a local government body?
+
+\noindent\textbf{Question Text That We Embed:} Does a typical new single-family home require approval from a local government body?
+
+\noindent\textbf{Question Background and Assumptions:} This question seeks to determine if a typical new single-family home requires approval from a local government body. Local government bodies, such as planning boards, zoning boards, or city councils, play a crucial role in the approval process for new developments. Their involvement ensures that the proposed projects comply with local zoning laws, land use regulations, and community plans. Approval from these bodies often involves reviewing site plans, conducting environmental assessments, and ensuring the proposed development meets all legal and regulatory requirements. The process may include several meetings, public hearings, and consultations with various municipal departments to ensure a comprehensive review. The goal is to maintain orderly development within the community, balancing growth with the preservation of local character and resources.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Does a typical new single-family home require approval from a local government body?
+
+\vspace{1cm}
+\subsection*{Question 40}
+\noindent\textbf{Question Phrased by Pioneer:} What is the maximum potential waiting time (in days) for government review of a typical new single-family home?
+
+\noindent\textbf{Question Text That We Embed:} What is the maximum potential waiting time (in days) for government review of a typical new single-family home?
+
+\noindent\textbf{Question Background and Assumptions:} The review process for constructing a new single-family home involves several stages, each of which may have a specific waiting period. The total waiting time includes the mandatory review periods as well as any discretionary days that can be added by the governing bodies or agencies. Each agency or department that a developer must interact with, such as city government departments like fire, police, sanitation, building, and planning, has its own review timeline. Additionally, discretionary days that may be required for public hearings, environmental reviews, or other procedural requirements must also be added to the total count of government review days.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the maximum potential waiting time (in days) for government review of a typical new single-family home?
+
+\vspace{1cm}
+\subsection*{Question 41}
+\noindent\textbf{Question Phrased by Pioneer:} What is the minimum cost of all explicitly stated fees and due diligence expenses for a typical new single-family home?
+
+\noindent\textbf{Question Text That We Embed:} What is the minimum cost of all explicitly stated fees and due diligence expenses for a typical new single-family home?
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the minimum cost of all explicitly stated fees and due diligence expenses for a typical new single-family home?
+
+\vspace{1cm}
+\subsection*{Question 42}
+\noindent\textbf{Question Phrased by Pioneer:} How many mandatory steps are involved in the approval process for rezoning or obtaining a variance?
+
+\noindent\textbf{Question Text That We Embed:} How many mandatory steps are involved in the approval process for rezoning or obtaining a variance?
+
+\noindent\textbf{Question Background and Assumptions:} The process for rezoning or obtaining a variance may involve multiple mandatory steps, each representing a distinct interaction or requirement that a developer must fulfill. Each agency or department that a developer must interact with is considered a separate step in the process. For instance, city government departments such as fire, police, sanitation, building, and planning are distinct entities, and engaging with each one constitutes an individual step. Additionally, any public hearings, environmental reviews, or other procedural requirements are also treated as separate steps in the approval process.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} How many mandatory steps are involved in the approval process for rezoning or obtaining a variance?
+
+\vspace{1cm}
+\subsection*{Question 43}
+\noindent\textbf{Question Phrased by Pioneer:} How many governing bodies or agencies need to approve rezoning or a variance?
+
+\noindent\textbf{Question Text That We Embed:} How many governing bodies or agencies need to approve rezoning or a variance?
+
+\noindent\textbf{Question Background and Assumptions:} Rezoning or requesting a variance involves obtaining approval from multiple governing bodies or agencies within a municipality. Each agency or department that has jurisdiction over any aspect of the rezoning process needs to be considered separately. For instance, city government departments such as fire, police, and sanitation are distinct entities, and their approval represents additional steps in the rezoning approval process. Therefore, it is crucial to account for each agency individually when determining the total number of governing bodies or agencies that must approve rezoning or a variance.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} How many governing bodies or agencies need to approve rezoning or a variance?
+
+\vspace{1cm}
+\subsection*{Question 44}
+\noindent\textbf{Question Phrased by Pioneer:} Does rezoning or obtaining a variance require a public hearing or public input process?
+
+\noindent\textbf{Question Text That We Embed:} Does rezoning or obtaining a variance require a public hearing or public input process?
+
+\noindent\textbf{Question Background and Assumptions:} The question investigates whether rezoning or obtaining a variance requires a public hearing or a public input process. Public hearings or public input processes are formal events where stakeholders, including residents, have the opportunity to express their opinions, concerns, or support for proposed zoning changes or variances. These processes are often mandated by zoning bylaws or ordinances to ensure transparency and community involvement in significant land use decisions. The need for such hearings can vary widely depending on the municipality's regulations, and they often involve presentations, discussions, and sometimes votes by local government bodies. The aim is to ensure that the rezoning or variance aligns with community standards and expectations, addressing potential impacts on the neighborhood, infrastructure, and environment.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Does rezoning or obtaining a variance require a public hearing or public input process?
+
+\vspace{1cm}
+\subsection*{Question 45}
+\noindent\textbf{Question Phrased by Pioneer:} Does rezoning or obtaining a variance require approval from a local government body?
+
+\noindent\textbf{Question Text That We Embed:} Does rezoning or obtaining a variance require approval from a local government body?
+
+\noindent\textbf{Question Background and Assumptions:} This question seeks to determine if rezoning or obtaining a variance requires approval from a local government body. Local government bodies, such as planning boards, zoning boards, or city councils, play a crucial role in the approval process for rezoning or variances. Their involvement ensures that the proposed changes comply with local zoning laws, land use regulations, and community plans. Approval from these bodies often involves reviewing proposed changes, conducting environmental assessments, and ensuring the proposed rezoning or variance meets all legal and regulatory requirements. The process may include several meetings, public hearings, and consultations with various municipal departments to ensure a comprehensive review. The goal is to maintain orderly development within the community, balancing growth with the preservation of local character and resources.
+
+\noindent\textbf{Question Type:} Binary
+
+\noindent\textbf{Rephrased Question the LLM Sees:} Does rezoning or obtaining a variance require approval from a local government body?
+
+\vspace{1cm}
+\subsection*{Question 46}
+\noindent\textbf{Question Phrased by Pioneer:} What is the maximum potential waiting time (in days) for government review of rezoning or a variance?
+
+\noindent\textbf{Question Text That We Embed:} What is the maximum potential waiting time (in days) for government review of rezoning or a variance?
+
+\noindent\textbf{Question Background and Assumptions:} The review process for rezoning or obtaining a variance involves several stages, each of which may have a specific waiting period. The total waiting time includes the mandatory review periods as well as any discretionary days that can be added by the governing bodies or agencies. Each agency or department that a developer must interact with, such as city government departments like fire, police, sanitation, building, and planning, has its own review timeline. Additionally, discretionary days that may be required for public hearings, environmental reviews, or other procedural requirements must also be added to the total count of government review days.
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the maximum potential waiting time (in days) for government review of rezoning or a variance?
+
+\vspace{1cm}
+\subsection*{Question 47}
+\noindent\textbf{Question Phrased by Pioneer:} What is the minimum cost of all explicitly stated fees and due diligence expenses for rezoning or obtaining a variance?
+
+\noindent\textbf{Question Text That We Embed:} What is the minimum cost of all explicitly stated fees and due diligence expenses for rezoning or obtaining a variance?
+
+\noindent\textbf{Question Type:} Numerical
+
+\noindent\textbf{Rephrased Question the LLM Sees:} What is the minimum cost of all explicitly stated fees and due diligence expenses for rezoning or obtaining a variance?
+
+\vspace{1cm}

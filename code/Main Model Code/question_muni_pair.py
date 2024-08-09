@@ -348,7 +348,7 @@ class QuestionMuniPair:
         question_type = self.question['Question Type']
 
         if question_type == 'Numerical':
-            sys_info = "You are a municpal zoning ordinance expert. Use the following context which follows 'Context: ' from a municipal ordinance about zoning laws to answer the question which follows 'Question: '. You think step by step and justify each step with explanations and evidence from the context. At the end of your argument you explictly state your answer in the format of 'ANSWER: ' followed by an integer or 'I DON'T KNOW'."
+            sys_info = "You are a municpal zoning ordinance expert. Use the following context which follows 'Context: ' from a municipal ordinance about zoning laws to answer the question which follows 'Question: '. You think step by step and justify each step with explanations and evidence from the context. At the end of your argument you explictly state your answer in the format of 'ANSWER: ' followed by a number or 'I DON'T KNOW'."
         elif question_type == 'Binary':
             sys_info = "You are a municipal zoning ordinance expert. You use the following context which follows 'Context: ' from a municipal ordinance to answer the question which follows 'Question: '. You first review the background information on the question following 'Background Information on Question:' and treat it as additional instructions. You assume that the context includes all of the relevant legal information for the question. You review the context thoroughly for evidence to answer the question. When you do cannot find any relevant information in the context, you realize that the town does not have relevant laws for the question and you reference the question background for how to handle this situation. You think step by step and justify each step with explanations and evidence from the context. At the end of your argument you review what the answer should be and then explicitly state your answer in the format of 'ANSWER: ' and then one of 'YES', 'NO', or 'I DON'T KNOW'."
         elif question_type == 'Lot Size':
@@ -453,7 +453,7 @@ class QuestionMuniPair:
         if not valid_responses:
             return {'Answer': None, 'Dont_Know': True}
 
-        numbers = [int(resp['Answer']) for resp in valid_responses]
+        numbers = [float(resp['Answer']) for resp in valid_responses]
         median_answer = statistics.median(numbers)
         return {'Answer': median_answer, 'Dont_Know': False}
 
@@ -474,6 +474,9 @@ class QuestionMuniPair:
             response =  self.aggregate_binary(parsed_responses)
         elif self.question['Question Type'] == 'Numerical':
             response =  self.aggregate_numerical(parsed_responses)
+        elif self.question['Question Type'] == 'Lot Size':
+            response = parsed_responses[0]
+
         else:
             raise ValueError('Unsupported question type for aggregation')
 
@@ -510,7 +513,7 @@ class QuestionMuniPair:
             if answer_str.upper() in ['YES', 'NO']:
                 return answer_str.capitalize()
         elif question_type == 'Numerical':
-            return int(answer_str)
+            return float(answer_str)
 
         # Raise an error if answer format is unexpected
         raise ValueError(f"Unexpected answer format for {question_type} question")

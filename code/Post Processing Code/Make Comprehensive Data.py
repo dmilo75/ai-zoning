@@ -15,7 +15,7 @@ os.chdir('../../')
 with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
-model = 'latest_combined'
+model = 'augest_latest'
 
 ##Load in summary data enriched
 sample_enriched = pd.read_excel(os.path.join(config['processed_data'],'Sample_Enriched.xlsx'), index_col = 0)

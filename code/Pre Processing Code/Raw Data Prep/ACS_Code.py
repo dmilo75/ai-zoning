@@ -15,7 +15,7 @@ data_path = config['processed_data']
 raw_path = config['raw_data']
 
 # Read in sample data
-sample = pd.read_excel(os.path.join(raw_path, "Sample Data.xlsx"), index_col=0)
+sample = pd.read_excel(os.path.join(raw_path, "Sample Data.xlsx"))
 
 # Initialize FIPS_COUNTY_ADJ with the same values as FIPS_COUNTY
 sample['FIPS_COUNTY_ADJ'] = sample['FIPS_COUNTY']

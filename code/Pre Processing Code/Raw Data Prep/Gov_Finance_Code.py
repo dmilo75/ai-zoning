@@ -15,7 +15,7 @@ data_path = config['processed_data']
 raw_path = config['raw_data']
 
 # Read in sample data
-sample = pd.read_excel(os.path.join(raw_path, "Sample Data.xlsx"), index_col=0)
+sample = pd.read_excel(os.path.join(raw_path, "Sample Data.xlsx"))
 
 # Initialize FIPS_COUNTY_ADJ with the same values as FIPS_COUNTY
 sample['FIPS_COUNTY_ADJ'] = sample['FIPS_COUNTY']
@@ -29,6 +29,14 @@ print(sample[sample['State'] == 'ct'][['Muni', 'FIPS_COUNTY', 'FIPS_COUNTY_ADJ']
 #Draw in muni data
 muni_data = pd.read_csv(os.path.join(raw_path,'Government Finances','Municipalities', "MunicipalData.csv"))
 township_data = pd.read_csv(os.path.join(raw_path,'Government Finances','Townships', "TownshipData.csv"))
+
+
+#Print percentiles of Total_Educ_Total_Exp in muni_data
+print(muni_data['Year4'].describe(percentiles = [.1,.25,.5,.75,.9]))
+
+
+##
+
 
 def clean_data(df):
 

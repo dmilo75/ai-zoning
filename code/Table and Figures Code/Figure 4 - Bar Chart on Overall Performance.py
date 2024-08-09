@@ -90,6 +90,7 @@ for model in models:
     with open(os.path.join(config['processed_data'],'Model Output',model,'Performance Metrics.pkl'), 'rb') as handle:
         perf_metrics[model_map[model]] = pickle.load(handle)
 
+
 #Make the charts
 make_charts(perf_metrics)
 
@@ -136,3 +137,100 @@ def cleveland_dot_plot(perf_metrics, with_ambiguous=False):
     plt.show()
 
 cleveland_dot_plot(perf_metrics)
+
+##Slides on performance
+import matplotlib.pyplot as plt
+
+# Updated short questions mapping
+short_questions = {
+    '1': 'Bylaw Online Availability',
+    '2': 'Zoning District Count',
+    '3': 'Multifamily By Right',
+    '4': 'Multifamily Allowed',
+    '5': 'Mixed-Use Buildings',
+    '6': 'Conversion To Multifamily',
+    '7': 'Multifamily Permit Authority',
+    '8': 'Townhouses Allowed',
+    '9': 'Age-Restricted Provisions',
+    '10': 'Age-Restricted Developments Built',
+    '11': 'Accessory Apartments Allowed',
+    '12': 'Accessory Apartment Authority',
+    '13': 'Flexible Zoning By Right',
+    '14': 'Flexible Zoning By Permit',
+    '15': 'Flexible Zoning Authority',
+    '16': 'Flexible Zoning Built',
+    '17w': 'Affordable Mandate',
+    '17': 'Affordable Incentive',
+    '18': 'Inclusionary Zoning Adopted',
+    '19': 'Affordable Units Built',
+    '20': 'Permit Cap Or Phasing',
+    '21': 'Wetlands Restricted in Lot Size Calc',
+    '22': 'Longest Frontage Requirement',
+    '23': 'Frontage Measurement',
+    '24': 'Lot Shape Requirements',
+    '25': 'Height Measurement',
+    '26': 'Additional Zoning Notes',
+    '28Mean': 'Mean Res Min Lot Size',
+    '28Min': 'Minimum Res Min Lot Size',
+    '28Max': 'Maximum Res Min Lot Size',
+    '30': 'Mandatory Approval Steps',
+    '31': 'Distinct Approval Bodies',
+    '32': 'Public Hearing Requirements',
+    '34': 'Max Review Waiting Time'
+}
+
+import matplotlib.pyplot as plt
+
+# Filter data for Binary dataframe
+binary_filtered = perf_metrics['GPT-4 Turbo']['Without Ambiguous']['Binary']
+binary_4_17 = binary_filtered[binary_filtered['Question'].isin(['4', '17'])]
+binary_avg = binary_filtered['Alternative Performance Metric'].mean()
+
+# Filter data for Continuous dataframe
+continuous_filtered = perf_metrics['GPT-4 Turbo']['Without Ambiguous']['Continuous']
+continuous_2_28Min = continuous_filtered[continuous_filtered['Question'].isin(['2', '28Min'])]
+continuous_avg = continuous_filtered[continuous_filtered['Question'].isin(['2', '22', '28Min'])]['Alternative Performance Metric'].mean()
+
+# Create subplots
+fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(4.67 * 2, 4.15), dpi=300)
+
+# Plot Binary data with updated labels
+binary_labels = [short_questions['4'], short_questions['17'], 'Average of All Questions']
+binary_values = [
+    binary_filtered[binary_filtered['Question'] == '4']['Alternative Performance Metric'].mean(),
+    binary_filtered[binary_filtered['Question'] == '17']['Alternative Performance Metric'].mean(),
+    binary_avg
+]
+colors = ['#6baed6', '#6baed6', '#2171b5']
+
+
+ax1.barh(binary_labels, binary_values, color=colors)
+ax1.set_title('Binary Questions')
+ax1.set_xlabel('Percent Accuracy')
+
+for i, v in enumerate(binary_values):
+    ax1.text(v / 2, i, f"{v:.0f}%", ha='center', va='center', color='white')
+
+# Plot Continuous data with updated labels
+continuous_labels = [short_questions['2'], short_questions['28Min'], 'Average of All Questions']
+continuous_values = [
+    continuous_filtered[continuous_filtered['Question'] == '2']['Alternative Performance Metric'].mean(),
+    continuous_filtered[continuous_filtered['Question'] == '28Min']['Alternative Performance Metric'].mean(),
+    continuous_avg
+]
+
+ax2.barh(continuous_labels, continuous_values, color=colors)
+ax2.set_title('Continuous Questions')
+ax2.set_xlabel('Correlation With Correct Answers')
+
+for i, v in enumerate(continuous_values):
+    ax2.text(v / 2, i, f"{v:.2f}", ha='center', va='center', color='white')
+
+# Display the plot
+plt.tight_layout()
+
+#Save figure
+plt.savefig(os.path.join(config['figures_path'], 'Slides - Performance by Question.png'), dpi = 300)
+
+plt.show()
+

@@ -1,0 +1,24 @@
+\begin{tabular}{@{} l *{10}{d{2.5}} @{}} 
+\toprule
+& \multicolumn{2}{c}{\begin{tabular}[c]{@{}c@{}}Question \\ Characteristics\end{tabular}} & \multicolumn{5}{c}{\begin{tabular}[c]{@{}c@{}}Municipality \\ Characteristics\end{tabular}} & \multicolumn{3}{c}{\begin{tabular}[c]{@{}c@{}}Fixed \\ Effects\end{tabular}} \\ 
+\cmidrule(lr){2-3} \cmidrule(lr){4-8} \cmidrule(lr){9-11}
+& \mc{(1)} & \mc{(2)} & \mc{(3)} & \mc{(4)} & \mc{(5)} & \mc{(6)} & \mc{(7)} & \mc{(8)} & \mc{(9)} & \mc{(10)}\\ 
+\midrule
+Binary Question          & 0.43^{\ast}^{\ast}^{\ast}     & 0.43^{\ast}^{\ast}^{\ast}     & 0.43^{\ast}^{\ast}^{\ast}     & 0.43^{\ast}^{\ast}^{\ast}     & 0.43^{\ast}^{\ast}^{\ast}     & 0.43^{\ast}^{\ast}^{\ast}     & 0.43^{\ast}^{\ast}^{\ast}     &             &         &                     \\
+                         & (0.03)      & (0.04)      & (0.03)      & (0.03)      & (0.03)      & (0.03)      & (0.03)      &             &         &                     \\
+Compound Question        &             & -0.01       &             &             &             &             &             &             &         &                     \\
+                         &             & (0.04)      &             &             &             &             &             &             &         &                     \\
+Population               &             &             & -0.04^{\ast}^{\ast}     &             &             &             & -0.04^{\ast}^{\ast}     &             &         &                     \\
+                         &             &             & (0.02)      &             &             &             & (0.02)      &             &         &                     \\
+Ordinance Length         &             &             &             & -0.00^{\ast}^{\ast}     &             &             & -0.00       &             &         &                     \\
+                         &             &             &             & (0.00)      &             &             & (0.00)      &             &         &                     \\
+Mean Reading Level       &             &             &             &             & -0.00       & 0.01        & 0.02        &             &         &                     \\
+                         &             &             &             &             & (0.00)      & (0.01)      & (0.01)      &             &         &                     \\
+Std Dev of Reading Level &             &             &             &             &             & -0.01       & -0.00       &             &         &                     \\
+                         &             &             &             &             &             & (0.00)      & (0.00)      &             &         &                     \\
+\midrule
+Question FE              & N           & N           & N           & N           & N           & N           & N           & Y           & N       & Y                   \\
+Muni FE                  & N           & N           & N           & N           & N           & N           & N           & N           & Y       & Y                   \\
+R-squared                & 0.28        & 0.28        & 0.29        & 0.29        & 0.28        & 0.28        & 0.30        & 0.41        & 0.04    & 0.45                \\
+\hline
+\end{tabular}

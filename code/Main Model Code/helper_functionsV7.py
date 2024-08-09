@@ -385,19 +385,23 @@ def split_munis_across_nodes(muni_list):
 def filter_pioneer(muni_list, type):
     # Read in training data
     if type == 'training':
-        training_file = os.path.join(config['raw_data'], "training.pickle")
+        training_file = os.path.join(config['raw_data'],'Model Subsets', "training.pickle")
         with open(training_file, "rb") as fIn:
             training = pd.read_pickle(fIn)
 
     # Read in testing data
     elif type == 'testing':
-        testing_file = os.path.join(config['raw_data'], "testing.pickle")
+        testing_file = os.path.join(config['raw_data'],'Model Subsets', "testing.pickle")
         with open(testing_file, "rb") as fIn:
             training = pd.read_pickle(fIn)
 
     elif type == 'wharton':
-        wharton_file = os.path.join(config['raw_data'], "wharton_training.pkl")
+        wharton_file = os.path.join(config['raw_data'],'Model Subsets', "wharton_training.pkl")
         training = pd.read_pickle(wharton_file)
+
+    elif type == 'aug_rerun':
+        aug_rerun_file = os.path.join(config['raw_data'],'Model Subsets', "aug_rerun.pkl")
+        training = pd.read_pickle(aug_rerun_file)
 
     # Otherwise, just return the muni_list
     else:
@@ -407,7 +411,9 @@ def filter_pioneer(muni_list, type):
     print("Pre filter")
     print(len(training))
 
-    total_training = [entry for entry in muni_list if entry['Muni'] in training]
+    training = [x.split('#')[1].split('#')[0] for x in training]
+
+    total_training = [entry for entry in muni_list if entry['Muni'].split('#')[1].split('#')[0] in training]
 
     print("Length of training")
     print(len(total_training))

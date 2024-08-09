@@ -75,7 +75,7 @@ variable_mapping = {
     'SF_Attached_Share_2022': 'Single-Family Attached Share',
     'Structures_2_or_More_Share_2022': 'Share Structures with 2 or More Units',
     'Mobile_Home_Boat_RV_Van_Share_2022': 'Mobile Home/Boat/RV/Van Share',
-    'Car_Truck_Van_Share_2022': 'Car/Truck/Van Share',
+    'Car_Truck_Van_Share_2022': 'Auto Commute Share',
     'Vacancy_Rate_2022': 'Vacancy Rate',
     'Share_Paying_More_Than_30_Percent_Rent_2022': 'Share Paying More Than 30% Rent',
     'Share_Commute_Over_30_Minutes_2022': 'Share with Commute Over 30 Minutes',
@@ -90,6 +90,7 @@ variable_mapping = {
     'gamma01b_newunits_FMM': 'New Housing Unit Elasticity',
     'Neighbors_25':'Log Neighbors within 25 Miles',
     'Land_Area_Acres':'Log Land Area',
+    'Local_Revenue_Per_Student':'Local Revenue Per Student',
 }
 # Updated short questions mapping
 short_questions = {
@@ -126,7 +127,12 @@ short_questions = {
     '30': 'Mandatory Approval Steps',
     '31': 'Distinct Approval Bodies',
     '32': 'Public Hearing Requirements',
-    '34': 'Max Review Waiting Time'
+    '34': 'Max Review Waiting Time',
+    '36': 'Parking Requirement',
+    '37': 'Garage Requirement',
+    '38': 'Single Family Parking Spots',
+    '39': 'Multi 600sqft Parking Spots',
+    '40': 'Multi 1000sqft Parking Spots'
 }
 
 
@@ -539,8 +545,7 @@ def fips_to_region(fips_state):
 ##
 
 
-data = pd.read_excel(r"C:\Users\Dan's Laptop\Dropbox\Inclusionary Zoning\Github\ai-zoning\processed data\Model Output\latest_combined\Comprehensive Data.xlsx")
-
+data = pd.read_excel(r"C:\Users\Dan's Laptop\Dropbox\Inclusionary Zoning\Github\ai-zoning\processed data\Model Output\augest_latest\Comprehensive Data.xlsx")
 
 
 ##Define all variables
@@ -556,12 +561,11 @@ df['MSA_State'] = df['CSA_Title'].fillna(df['FIPS_STATE'])
 # Variables dictionary
 variables_dict = {
     'Chty': ['job_density_2013','kfr_weighted'],
-    'Educ':['cs_mn_avg_mth_ol','cs_mn_grd_mth_ol','perflu'],
+    'Educ':['cs_mn_avg_mth_ol','cs_mn_grd_mth_ol','perflu','Local_Revenue_Per_Student'],
     'Gov': ['Property_Tax_Rate_2017','Total_Expenditure_Per_Capita_2017'],
     'Perm': ['All_Unit_Permits'],
     'Date': ['yr_incorp'],
     'Vote': ['percent_democrat'],
-    'Elas': ['gamma01b_newunits_FMM'],
     'Spat': ['Land_Area_Acres','Neighbors_25','Housing_Unit_Density'],
     'Dist': ['Miles_to_Metro_Center'],
     'Afford':['Combined_Affordable_Units'],
@@ -570,6 +574,7 @@ variables_dict = {
 
 # ACS variables
 acs_vars = [
+'Car_Truck_Van_Share_2022',
 'Foreign_Born_Share_2022',
     'Median_Household_Income_2022',
 'Population_Aged_65_and_Over_2022',
@@ -595,8 +600,6 @@ formulas = {
     'Bivariate FE': {'formula':f'{lhs_var} ~ {{bivariate_var}}+C(MSA_State)' ,'data':df},
     'All': {'formula':f'{lhs_var} ~ ' + ' + '.join(acs_vars + sum(variables_dict.values(), [])),'data':df},
 'All FE': {'formula':f'{lhs_var} ~ C(MSA_State)+' + ' + '.join(acs_vars + sum(variables_dict.values(), [])),'data':df},
-    'elast': {'formula':f'{lhs_var} ~ gamma01b_newunits_FMM+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
-'elast MSA FE': {'formula':f'{lhs_var} ~ gamma01b_newunits_FMM+C(MSA_State)+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
 }
 rhs_vars = []
 
@@ -604,33 +607,8 @@ rhs_vars = []
 
 rhs_vars.extend(acs_vars + sum(variables_dict.values(), []))
 
-df = run_reg(formulas, lhs_var,rhs_vars, no_se = False)
+reg_df = run_reg(formulas, lhs_var,rhs_vars, no_se = False)
 
-##Bar chart of coefs
-
-# Drop specified indices
-df = df.drop(index=['', 'Intercept', 'R-squared', 'N'], errors='ignore')
-
-# Remove asterisks from the 'Bivariate FE' column values
-df['Bivariate FE'] = df['Bivariate FE'].str.replace('*', '')
-
-# Keep only the 'Bivariate FE' column
-df = df[['Bivariate FE']]
-
-#Make numeric
-df['Bivariate FE'] = df['Bivariate FE'].astype(float)
-
-# Sort the dataframe
-df = df.sort_values(by='Bivariate FE', ascending=False)
-
-# Plot a horizontal bar chart
-df['Bivariate FE'].astype(float).plot(kind='barh')
-import matplotlib.pyplot as plt
-plt.xlabel('Bivariate FE')
-plt.ylabel('Index')
-plt.title('Bivariate FE Values')
-plt.tight_layout()
-plt.show()
 
 
 ##Second PC
@@ -647,12 +625,11 @@ df['MSA_State'] = df['CSA_Title'].fillna(df['FIPS_STATE'])
 # Variables dictionary
 variables_dict = {
     'Chty': ['job_density_2013','kfr_weighted'],
-    'Educ':['cs_mn_avg_mth_ol','cs_mn_grd_mth_ol','perflu'],
+    'Educ':['cs_mn_avg_mth_ol','cs_mn_grd_mth_ol','perflu','Local_Revenue_Per_Student'],
     'Gov': ['Property_Tax_Rate_2017','Total_Expenditure_Per_Capita_2017'],
     'Perm': ['All_Unit_Permits'],
     'Date': ['yr_incorp'],
     'Vote': ['percent_democrat'],
-    'Elas': ['gamma01b_newunits_FMM'],
     'Spat': ['Land_Area_Acres','Neighbors_25','Housing_Unit_Density'],
     'Dist': ['Miles_to_Metro_Center'],
     'Afford':['Combined_Affordable_Units'],
@@ -661,6 +638,7 @@ variables_dict = {
 
 # ACS variables
 acs_vars = [
+'Car_Truck_Van_Share_2022',
 'Foreign_Born_Share_2022',
     'Median_Household_Income_2022',
 'Population_Aged_65_and_Over_2022',
@@ -688,8 +666,8 @@ formulas = {
     'Bivariate FE': {'formula':f'{lhs_var} ~ {{bivariate_var}}+C(MSA_State)' ,'data':df},
     'All': {'formula':f'{lhs_var} ~ ' + ' + '.join(acs_vars + sum(variables_dict.values(), [])),'data':df},
 'All FE': {'formula':f'{lhs_var} ~ C(MSA_State)+' + ' + '.join(acs_vars + sum(variables_dict.values(), [])),'data':df},
-    'elast': {'formula':f'{lhs_var} ~ gamma01b_newunits_FMM+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
-'elast MSA FE': {'formula':f'{lhs_var} ~ gamma01b_newunits_FMM+C(MSA_State)+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
+    #'elast': {'formula':f'{lhs_var} ~ gamma01b_newunits_FMM+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
+#'elast MSA FE': {'formula':f'{lhs_var} ~ gamma01b_newunits_FMM+C(MSA_State)+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
 }
 
 rhs_vars = []
@@ -698,33 +676,62 @@ rhs_vars = []
 
 rhs_vars.extend(acs_vars + sum(variables_dict.values(), []))
 
-df = run_reg(formulas, lhs_var,rhs_vars)
+reg_df = run_reg(formulas, lhs_var,rhs_vars)
+
+##Elasticity measures
+
+# Dictionary for formulas
+formulas = {
+    'first elast': {'formula':f'First_PC ~ gamma01b_newunits_FMM+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
+'first elast FE': {'formula':f'First_PC ~ gamma01b_newunits_FMM+C(MSA_State)+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
+    'second elast': {'formula':f'Second_PC ~ gamma01b_newunits_FMM+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
+'second elast FE': {'formula':f'Second_PC ~ gamma01b_newunits_FMM+C(MSA_State)+Trct_FrcDev_01+Trct_FrcDev_01_squared+lsf_1_flat_plains+Miles_to_Metro_Center','data':df},
+}
+rhs_vars = ['gamma01b_newunits_FMM','Trct_FrcDev_01','Trct_FrcDev_01_squared','lsf_1_flat_plains','Miles_to_Metro_Center']
+
+#First we run for First
+lhs_var = 'First_PC'
+reg_df = run_reg(formulas, lhs_var,rhs_vars)
+
 
 ##
 
-# Drop specified indices
-df = df.drop(index=['', 'Intercept', 'R-squared', 'N'], errors='ignore')
-
-# Remove asterisks from the 'Bivariate FE' column values
-df['Bivariate FE'] = df['Bivariate FE'].str.replace('*', '')
-
-#Make numeric
-df['Bivariate FE'] = df['Bivariate FE'].astype(float)
-
-# Keep only the 'Bivariate FE' column
-df = df[['Bivariate FE']]
-
-# Sort the dataframe
-df = df.sort_values(by='Bivariate FE', ascending=False)
-
-# Plot a horizontal bar chart
-df['Bivariate FE'].astype(float).plot(kind='barh')
 import matplotlib.pyplot as plt
-plt.xlabel('Bivariate FE')
-plt.ylabel('Index')
-plt.title('Bivariate FE Values')
-plt.tight_layout()
-plt.show()
+
+def plot_regression_bar_chart(reg_df,title):
+    # Drop specified indices
+    df = reg_df.copy().drop(index=['', 'Intercept', 'R-squared', 'N', 'New Housing Unit Elasticity'], errors='ignore')
+
+    # Remove asterisks from the 'Bivariate FE' column values
+    df['Bivariate FE'] = df['Bivariate FE'].str.replace('*', '')
+
+    # Make numeric
+    df['Bivariate FE'] = df['Bivariate FE'].astype(float)
+
+    # Keep only the 'Bivariate FE' column
+    df = df[['Bivariate FE']]
+
+    # Sort the dataframe
+    df = df.sort_values(by='Bivariate FE', ascending=False)
+
+    # Plot a horizontal bar chart
+    plt.figure(dpi = 300)
+
+    #Set figsize
+    plt.figure(figsize=(7, 6))
+
+    df['Bivariate FE'].astype(float).plot(kind='barh')
+    plt.xlabel('Coefficient on Normalized Variable')
+    plt.ylabel('Independent Variable')
+    plt.title(title)
+    plt.tight_layout()
+
+    #Save fig
+    plt.savefig(os.path.join(config['figures_path'],'Slides - Reg Bar PC1'), dpi = 300)
+
+    plt.show()
+
+plot_regression_bar_chart(reg_df,  'Bivariate Regression w/ MSA FE')
 
 
 ##Distance to Center
@@ -759,6 +766,9 @@ df['Region'] = df['FIPS_STATE'].apply(fips_to_region)
 
 lhs_var = 'Miles_to_Metro_Center'
 
+#Drop question 35, and any with 27 in it
+df = df.drop(columns = ['Question_35'])
+df = df[[col for col in df.columns if 'Question_27' not in col]]
 
 # Variables dictionary
 variables_dict_quesiton = {

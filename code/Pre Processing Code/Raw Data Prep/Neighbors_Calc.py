@@ -20,7 +20,7 @@ data = pd.read_excel(os.path.join(config['raw_data'], 'Sample Data.xlsx'))
 all_ids = set(data['CENSUS_ID_PID6'])
 
 # Load distance matrix
-distance_matrix = pd.read_csv(os.path.join(config['processed_data'], 'Compact Distance Matrices', 'combined_lower_triangular_distances_full.csv'))
+distance_matrix = pd.read_csv(os.path.join(config['processed_data'], 'Compact Distance Matrices', 'combined_lower_triangular_distances.csv'))
 
 # Make ID1 and ID2 ints and ensure ID1 < ID2 in distance_matrix
 distance_matrix['ID1'] = distance_matrix['ID1'].astype(int)

@@ -74,7 +74,7 @@ def process_min_lot_size(df):
         question_rows = df[df['Question'] == question]
 
         # Append the 'Answer' as a string to the 'Explanation' column after a newline
-        question_rows['Explanation'] = question_rows['Explanation'] + '\n' + question_rows['Answer'].astype(str)
+        question_rows['Explanation'] = question_rows['Explanation']
 
         # Copy question_rows thrice, once for min, once for max, and once for mean
         question_rows_min = question_rows.copy()
@@ -108,14 +108,23 @@ def load_data(file_path):
             file_full_path = os.path.join(file_path, file)
             with open(file_full_path, 'rb') as f:
                 data = pickle.load(f)
+                # Get the file's last modified date
+                last_modified_date = os.path.getmtime(file_full_path)
+                for item in data:
+                    item['Date'] = last_modified_date
                 # Append the data from each file to the all_data list
                 all_data.extend(data)
     else:
         # If the file_path is not a directory, assume it's a single file
         with open(file_path, 'rb') as file:
             all_data = pickle.load(file)
+            # Get the file's last modified date
+            last_modified_date = os.path.getmtime(file_path)
+            for item in all_data:
+                item['Date'] = last_modified_date
 
     return all_data
+
 
 # Process answers for "I don't know" values
 def process_answers(row):
@@ -133,7 +142,7 @@ def process_answers(row):
     elif row['Question'] in numerical:
 
         try:
-            int(row['Answer'])
+            float(row['Answer'])
 
         except:
             return np.nan
@@ -184,13 +193,11 @@ def load_dataset(file_paths):
     # Ensure 'Question' column is string type
     df['Question'] = df['Question'].astype(str)
 
-    #Throw an error if duplicate muni questions pairs
-    if df.duplicated(subset = ['Muni','Question']).any():
+    #Sort by question-muni and date
+    df = df.sort_values(by = ['Question','Muni','Date'], ascending = False)
 
-        #Keep first occurence
-        df = df.drop_duplicates(subset = ['Muni','Question'])
-
-        print('Duplicate Muni-Question pairs in data')
+    #Keep the first questino muni by date
+    df = df.drop_duplicates(subset = ['Question','Muni'],keep = 'first')
 
     #Process min lot size question
     df = process_min_lot_size(df)
@@ -247,17 +254,18 @@ def process_dataset(file_paths, export_path = None, only_light = False):
 # Main code here
 if __name__ == "__main__":
     # Process the dataset
-    dataset_name = 'process_multi'
+    dataset_name = 'augest_latest'
 
-    file_path1 = os.path.join(config['processed_data'], 'Model Output', dataset_name)
+    file_path1 = os.path.join(config['processed_data'], 'Model Output', 'process_multi')
     file_path2 = os.path.join(config['processed_data'], 'Model Output', 'national_run_may')
+    file_path3 = os.path.join(config['processed_data'], 'Model Output', 'aug_rerun')
+    file_path4 = os.path.join(config['processed_data'], 'Model Output', 'national_parking')
 
-    file_paths = [file_path1, file_path2]
+    file_paths = [file_path1, file_path2, file_path3, file_path4]
 
-    export_path = os.path.join(config['processed_data'], 'Model Output', 'latest_combined')
+    export_path = os.path.join(config['processed_data'], 'Model Output', dataset_name)
 
     process_dataset(file_paths, export_path = export_path, only_light = True)
-
 
 
 

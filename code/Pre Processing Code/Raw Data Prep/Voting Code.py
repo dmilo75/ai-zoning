@@ -13,7 +13,7 @@ data_path = config['processed_data']
 raw_path = config['raw_data']
 
 #Read in sample data
-sample = pd.read_excel(os.path.join(raw_path,"Sample Data.xlsx"),index_col  = 0)
+sample = pd.read_excel(os.path.join(raw_path,"Sample Data.xlsx"))
 
 # Initialize FIPS_COUNTY_ADJ with the same values as FIPS_COUNTY
 sample['FIPS_COUNTY_ADJ'] = sample['FIPS_COUNTY']
@@ -137,5 +137,8 @@ sample_merged2['percent_democrat'] = sample_merged2['percent_democrat_x'].fillna
 
 final_df = sample_merged2[['CENSUS_ID_PID6','percent_democrat']]
 
+
+
 #Export in processed data
 final_df.to_excel(os.path.join(data_path,'interim_data','Voting Data.xlsx'))
+

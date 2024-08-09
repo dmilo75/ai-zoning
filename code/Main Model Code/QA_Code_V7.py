@@ -13,7 +13,6 @@ with open('config.yaml', 'r') as file:
 fake_batch = False
 
 #%% Parameters
-
 # Set the model type being used
 os.environ['MODEL_TYPE'] = 'gpt-4-turbo-2024-04-09'
 
@@ -21,7 +20,7 @@ os.environ['MODEL_TYPE'] = 'gpt-4-turbo-2024-04-09'
 if os.name == 'nt':
     os.environ['CONTEXT_LENGTH'] = '4'
     os.environ['TASK_ID'] = '1'
-    export_folder_name = 'process_refine'
+    export_folder_name = 'lot_size_test'
 else:
     # Arguments processing
     if len(sys.argv) < 2:
@@ -49,21 +48,11 @@ os.environ['SAMPLE_SIZE'] = 'all'
 # The list of munis to process
 munis_for_task = hf.get_munis('all')
 
-#Randomly shuffle the munis
-#Set seed for random
-#hf.random.seed(8)
-#hf.random.shuffle(munis_for_task)
-
-#munis_for_task = munis_for_task[0:3]
-
 #The list of questions to process
 questions = hf.questions
 
-#Drop row indices 11, 12 and 15 from questions
-questions = questions.drop([11,12,15])
-
-#Subset for process questions
-questions = questions.loc[[16,17,18,19]]
+#Just run on parking questions
+questions = questions[-5:]
 
 #Establish results folder if it doesn't exist
 folder_path = os.path.join(config['processed_data'], 'Model Output',export_folder_name)
