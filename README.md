@@ -1,6 +1,6 @@
-# July 22 Update
+# September 15 Update
 
-For the latest paper please see [here](https://conference.nber.org/conf_papers/f205452.pdf). 
+For the latest paper please see [here](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4627587). 
 
 For the latest data please see [here](https://www.dropbox.com/scl/fi/x6zr6ejh63frx65qneq92/Public-Dataset-v1.xlsx?rlkey=zxjjj2j7tt54imatif2gjddql&st=u6h0kmhk&dl=0).
 
