@@ -1,0 +1,9 @@
+
+cohere
+langchain
+numpy
+openai
+pandas
+scipy
+tiktoken
+pyyaml

@@ -1,0 +1,35 @@
+##################
+# Filepaths #
+##################
+muni_text : #"/vast/dm4766/context_building_refine/raw_dic" #Directory where the raw text of all municipalities is stored
+embeddings : "processed data/Embeddings" #Directory where the embeddings for all municipalities is stored
+pre_embed: #"/vast/dm4766/context_building_refine/pre_embed" #Folder to store pre-processed muni text pre embedding
+processed_data : "processed data" #Folder to store cleaned data
+raw_data : "raw data" #Folder to store raw data in
+
+shape_files : "raw data/Shape Files" #Directory where shape files are stored for mapping procedure
+figures_path : "results/figures" #Directory to store all figures in
+tables_path : "results/tables" #Directory to store all tables in
+batch_folder : "results"
+
+##################
+# Config Parameters #
+##################
+max_tokens: 4 #How many thousand tokens is the maximum context length
+max_batch_tokens: 250000000 #How many tokens cumulatively can be in queue for OpenAI (depends on the model and your own rate limits)
+max_batch_requests: 50000 #How many requests can be in queue for OpenAI (depends on the model and your own rate limits)
+sample_size: "1" #How many municipalities to use, if 'all' then uses the full sample otherwise if integer then takes a random sample of that size for testing
+model_type: "gpt-4-turbo-2024-04-09" #Which model to use for OpenAI
+fake_batch: "True" #If True, then the batch is not sent to OpenAI and instead a fake response is generated
+export_folder_name: "testing" #Name of the folder to store the results in
+testing_mode: "True" #If True, then will only run on one municipality and one question to just test whether the code is working
+
+
+##################
+# API Keys #
+##################
+openai_key : ''
+claude_key : ''
+gemini_key : ''
+census_key : ''
+cohere_key : ''
