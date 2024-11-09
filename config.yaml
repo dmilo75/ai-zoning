@@ -1,11 +1,12 @@
 ##################
 # Filepaths #
 ##################
-muni_text : #"/vast/dm4766/context_building_refine/raw_dic" #Directory where the raw text of all municipalities is stored
+muni_text : "raw data/text" #Directory where the raw text of all municipalities is stored
 embeddings : "processed data/Embeddings" #Directory where the embeddings for all municipalities is stored
-pre_embed: #"/vast/dm4766/context_building_refine/pre_embed" #Folder to store pre-processed muni text pre embedding
+pre_embed: "processed data/Preprocessed" #Folder to store pre-processed muni text pre embedding
 processed_data : "processed data" #Folder to store cleaned data
 raw_data : "raw data" #Folder to store raw data in
+
 
 shape_files : "raw data/Shape Files" #Directory where shape files are stored for mapping procedure
 figures_path : "results/figures" #Directory to store all figures in
@@ -23,13 +24,3 @@ model_type: "gpt-4-turbo-2024-04-09" #Which model to use for OpenAI
 fake_batch: "True" #If True, then the batch is not sent to OpenAI and instead a fake response is generated
 export_folder_name: "testing" #Name of the folder to store the results in
 testing_mode: "True" #If True, then will only run on one municipality and one question to just test whether the code is working
-
-
-##################
-# API Keys #
-##################
-openai_key : ''
-claude_key : ''
-gemini_key : ''
-census_key : ''
-cohere_key : ''

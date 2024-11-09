@@ -6,6 +6,8 @@ import yaml
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from openai import OpenAI
 import gpt_functions as cg
+from dotenv import load_dotenv
+load_dotenv()
 
 #Whether to skip certain operations (it will still do these operations for new munis)
 skip_text_process = False
@@ -37,7 +39,7 @@ else:
     num_nodes = 1
 
 # Openai
-client = OpenAI(api_key=config['openai_key'])
+client = OpenAI(api_key=os.getenv('openai_key'))
 
 #Load in tokenizer
 encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")

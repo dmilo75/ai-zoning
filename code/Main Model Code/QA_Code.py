@@ -4,6 +4,8 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 import yaml
 import sys
 import helper_functions as hf
+from dotenv import load_dotenv
+load_dotenv()
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 os.chdir('../../')
 with open('config.yaml', 'r') as file:
