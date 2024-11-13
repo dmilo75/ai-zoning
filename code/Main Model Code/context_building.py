@@ -10,13 +10,15 @@ import gpt_functions as cg
 import yaml
 import pandas as pd
 import cohere
+from dotenv import load_dotenv
+load_dotenv()
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 os.chdir('../../')
 with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 #Configure the cohere client
-co = cohere.Client(config['cohere_key'])
+co = cohere.Client(os.getenv('cohere_key'))
 
 # %% Pull in data on question embeddings
 with open(os.path.join(config['embeddings'], "Questions.pkl"), "rb") as fIn:

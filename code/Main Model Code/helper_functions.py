@@ -7,6 +7,8 @@ import random
 import gpt_functions as gpt
 from question_muni_pair import QuestionMuniPair
 import yaml
+from dotenv import load_dotenv
+load_dotenv()
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 os.chdir('../../')
 with open('config.yaml', 'r') as file:

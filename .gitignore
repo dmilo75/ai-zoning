@@ -1,3 +1,4 @@
-config.yaml
+.env
 "processed data/llama-13b.xlsx"
 "processed data/llama-70b.xlsx"
+__pycache__/

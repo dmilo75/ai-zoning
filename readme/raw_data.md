@@ -82,4 +82,9 @@ This folder contains `.txt` files, each named by the question ID. Each file incl
 
 ---
 
+---
 
+#### 6. **text Folder**
+This folder contains a nested structure that ultimately yields `.pkl` files that contain the zoning ordinances in text form. The text from these `.pkl` files are turned into embeddings, which are fed into the model. Currently, for demonstration purposes, the text folder contains one `.pkl` file that holds the ordinances scraped directly from the website of Wheaton, Illinois
+
+---

@@ -6,6 +6,8 @@ import pandas as pd
 import json
 import statistics
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)

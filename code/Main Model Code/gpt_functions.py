@@ -9,6 +9,8 @@ import time
 import json
 import tempfile
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+load_dotenv()
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 with open('../../config.yaml', 'r') as file:
@@ -17,7 +19,7 @@ with open('../../config.yaml', 'r') as file:
 #Python functions used to call chat gpt
 
 # Openai
-client = OpenAI(api_key=config['openai_key'])
+client = OpenAI(api_key=os.getenv('openai_key'))
 
 #Random seed for chat gpt
 seed = 42
