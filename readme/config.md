@@ -27,12 +27,3 @@ These parameters control how the pipeline interacts with external APIs and how d
 - **export_folder_name**: Specifies the name of the folder where results will be stored.
 - **testing_mode**: Set to `True` to only run on one municipality and one question to just test whether the code runs. 
 
-## API Keys
-The following are placeholders for API keys needed to interact with external services. Ensure that these keys are properly set before running the pipeline.
-
-- **openai_key**: Your OpenAI API key.
-- **claude_key**: API key for Claude.
-- **gemini_key**: API key for Gemini.
-- **census_key**: U.S. Census API key.
-- **cohere_key**: API key for Cohere.
-
