@@ -18,7 +18,7 @@ with open('config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 #Configure the cohere client
-co = cohere.Client(os.getenv('cohere_key'))
+co = cohere.Client(os.getenv('COHERE_API_KEY'))
 
 # %% Pull in data on question embeddings
 with open(os.path.join(config['embeddings'], "Questions.pkl"), "rb") as fIn:

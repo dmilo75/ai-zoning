@@ -1,4 +1,3 @@
-from openai import OpenAI
 import openai
 import queue
 import threading
@@ -19,7 +18,8 @@ with open('../../config.yaml', 'r') as file:
 #Python functions used to call chat gpt
 
 # Openai
-client = OpenAI(api_key=os.getenv('openai_key'))
+openai.api_key = os.getenv('OPENAI_API_KEY')
+client = openai
 
 #Random seed for chat gpt
 seed = 42
@@ -252,5 +252,15 @@ answer_question_lot_size_residential = [
         }
     }
 ]
+
+try:
+    from openai._base_client import SyncHttpxClientWrapper
+    _original_init = SyncHttpxClientWrapper.__init__
+    def _patched_init(self, **kwargs):
+        kwargs.pop('proxies', None)
+        _original_init(self, **kwargs)
+    SyncHttpxClientWrapper.__init__ = _patched_init
+except Exception as e:
+    print('Failed patching SyncHttpxClientWrapper:', e)
 
 

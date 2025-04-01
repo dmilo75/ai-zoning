@@ -5,6 +5,7 @@ import yaml
 import sys
 import helper_functions as hf
 from dotenv import load_dotenv
+import patch_openai
 load_dotenv()
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 os.chdir('../../')

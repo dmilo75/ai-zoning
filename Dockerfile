@@ -4,4 +4,4 @@ COPY config.yaml ./
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY . .
-# CMD ["python", "app.py"]
+CMD ["python", "code/Main Model Code/QA_Code.py"]
