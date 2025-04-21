@@ -4,7 +4,7 @@ The Advent of Large Language Models (LLMs) has transformed many facets of societ
 
 For the latest paper please see [here](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4627587). 
 
-For the latest data please see [here](https://www.dropbox.com/scl/fi/x6zr6ejh63frx65qneq92/Public-Dataset-v1.xlsx?rlkey=zxjjj2j7tt54imatif2gjddql&st=u6h0kmhk&dl=0). 
+For the latest data please see [here](https://www.dropbox.com/scl/fo/7ujwxl4fbzor65vu7zjku/ABezF48kL_THI_nfA35PIGQ?rlkey=0aip2l0c0hq2dvplou040hqhu&st=99ow05cq&dl=0). 
 
 All are included in the repository besides the .env file, which you will need to create in the main AI-Zoning directory (same directory as config.yaml). A guide on what to include in you .env file, as well as documentation for all the key components of the repository, can be found in the readme folder of this repository.  
 
