@@ -82,10 +82,7 @@ The codebase is organized into several key folders and files:
 The `raw_data` folder contains several essential datasets:
 
 - **Sample Data.xlsx:** List of municipalities and their zoning ordinances.
-- **American Community Survey Data:** Demographic and housing data for municipalities.
-- **Building Permits Survey Data:** 2022 building permits data, detailing construction permits issued by local authorities.
 - **Questions.xlsx:** List of questions used in the analysis, including binary and numerical categories.
-- **Kor Training Data:** Manually parsed llama output used to train Kor, which maps unstructured LLM responses to structured answers.
 
 ### Processed Data
 
